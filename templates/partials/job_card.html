@@ -1,0 +1,92 @@
+<!-- Job Detail Modal Content -->
+<div class="space-y-6">
+    <!-- Job Header -->
+    <div class="text-center border-b pb-4">
+        <h1 class="text-2xl font-bold mb-2">{{ job.title }}</h1>
+        {% if job.company %}
+        <p class="text-lg text-base-content/70">{{ job.company }}</p>
+        {% endif %}
+        {% if job.location %}
+        <p class="text-base-content/60">📍 {{ job.location }}</p>
+        {% endif %}
+    </div>
+
+    <!-- Job Description -->
+    {% if job.description %}
+    <div class="card bg-base-200">
+        <div class="card-body">
+            <h3 class="card-title">Description</h3>
+            <p class="text-base-content/80 leading-relaxed">{{ job.description }}</p>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Job Details Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {% if job.salary_range %}
+        <div class="card bg-base-200">
+            <div class="card-body">
+                <h4 class="card-title text-lg">💰 Salary</h4>
+                <p class="text-xl font-semibold text-success">{{ job.salary_range }}</p>
+                {% if job.salary_per %}
+                <p class="text-sm text-base-content/70">per {{ job.salary_per }}</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if job.job_type or job.vessel_type or job.vessel_size %}
+        <div class="card bg-base-200">
+            <div class="card-body">
+                <h4 class="card-title text-lg">🚢 Position Details</h4>
+                <div class="space-y-2">
+                    {% if job.job_type %}
+                    <p><span class="font-medium">Type:</span> {{ job.job_type }}</p>
+                    {% endif %}
+                    {% if job.vessel_type %}
+                    <p><span class="font-medium">Vessel:</span> {{ job.vessel_type }}</p>
+                    {% endif %}
+                    {% if job.vessel_size %}
+                    <p><span class="font-medium">Size:</span> {{ job.vessel_size }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if job.department %}
+        <div class="card bg-base-200">
+            <div class="card-body">
+                <h4 class="card-title text-lg">👥 Department</h4>
+                <p class="text-lg">{{ job.department }}</p>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if job.source %}
+        <div class="card bg-base-200">
+            <div class="card-body">
+                <h4 class="card-title text-lg">📋 Source</h4>
+                <p class="text-lg">{{ job.source.title() }}</p>
+                {% if job.external_id %}
+                <p class="text-sm text-base-content/70">ID: {{ job.external_id }}</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Apply Button -->
+    {% if job.source_url %}
+    <div class="text-center pt-4 border-t">
+        <a href="{{ job.source_url }}" 
+           target="_blank" 
+           class="btn btn-primary btn-lg gap-2">
+            Apply for this Position
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+            </svg>
+        </a>
+    </div>
+    {% endif %}
+</div> 

@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  backend:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=sqlite:///./yacht_jobs.db
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - FB_ACCESS_TOKEN=${FB_ACCESS_TOKEN}
+      - FB_GROUP_ID=${FB_GROUP_ID}
+      - FB_APP_SECRET=${FB_APP_SECRET}
+      - FB_VERIFY_TOKEN=${FB_VERIFY_TOKEN}
+    depends_on:
+      - redis
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+      - NEXT_PUBLIC_WS_URL=ws://localhost:8000
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+volumes:
+  redis_data: 

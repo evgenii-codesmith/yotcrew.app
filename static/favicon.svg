@@ -1,0 +1,56 @@
+<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="32" cy="32" r="28" fill="url(#gradientBg)" stroke="url(#gradientStroke)" stroke-width="3"/>
+  
+  <!-- Yacht hull -->
+  <path d="M 20 40 Q 32 25 44 40 L 41 43 Q 32 33 23 43 Z" fill="url(#yachtGradient)" stroke="#60A5FA" stroke-width="2"/>
+  
+  <!-- Yacht mast -->
+  <line x1="32" y1="25" x2="32" y2="43" stroke="#60A5FA" stroke-width="3" stroke-linecap="round"/>
+  
+  <!-- Main sail -->
+  <path d="M 32 27 Q 42 23 40 37 L 32 35 Z" fill="url(#sailGradient)" stroke="#3B82F6" stroke-width="1.5"/>
+  
+  <!-- Jib sail -->
+  <path d="M 32 29 Q 24 25 26 35 L 32 33 Z" fill="url(#sailGradient2)" stroke="#3B82F6" stroke-width="1.5"/>
+  
+  <!-- Wave elements -->
+  <path d="M 10 47 Q 17 43 24 47 Q 31 51 38 47 Q 45 43 52 47" 
+        stroke="url(#waveGradient)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M 14 50 Q 20 47 26 50 Q 32 53 38 50 Q 44 47 50 50" 
+        stroke="url(#waveGradient)" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.7"/>
+  
+  <!-- Gradient definitions -->
+  <defs>
+    <linearGradient id="gradientBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1E293B;stop-opacity:0.9" />
+      <stop offset="100%" style="stop-color:#0F172A;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="gradientStroke" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#60A5FA;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#3B82F6;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="yachtGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F8FAFC;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E2E8F0;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="sailGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#DBEAFE;stop-opacity:0.9" />
+      <stop offset="100%" style="stop-color:#BFDBFE;stop-opacity:0.7" />
+    </linearGradient>
+    
+    <linearGradient id="sailGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#EFF6FF;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#DBEAFE;stop-opacity:0.6" />
+    </linearGradient>
+    
+    <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#60A5FA;stop-opacity:0.6" />
+      <stop offset="50%" style="stop-color:#3B82F6;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#60A5FA;stop-opacity:0.6" />
+    </linearGradient>
+  </defs>
+</svg>

@@ -1,0 +1,92 @@
+<!-- Dashboard Statistics -->
+<div class="stats shadow-xl w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 bg-base-100" id="dashboard-stats">
+    <div class="stat place-items-center">
+        <div class="stat-figure text-primary">
+            <i data-lucide="briefcase" class="h-8 w-8"></i>
+        </div>
+        <div class="stat-title">Total Opportunities</div>
+        <div class="stat-value text-primary">{{ total_jobs }}</div>
+        <div class="stat-desc">Premium yacht positions</div>
+    </div>
+
+    <div class="stat place-items-center">
+        <div class="stat-figure text-secondary">
+            <i data-lucide="trending-up" class="h-8 w-8"></i>
+        </div>
+        <div class="stat-title">New Today</div>
+        <div class="stat-value text-secondary">{{ today_jobs }}</div>
+        <div class="stat-desc">
+            {% if today_jobs > 0 %}
+            <span class="text-success flex items-center gap-1">
+                <i data-lucide="arrow-up" class="h-3 w-3"></i>
+                Fresh postings
+            </span>
+            {% else %}
+            <span class="text-base-content/50">Check back tomorrow</span>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="stat place-items-center">
+        <div class="stat-figure text-accent">
+            <i data-lucide="calendar-days" class="h-8 w-8"></i>
+        </div>
+        <div class="stat-title">This Week</div>
+        <div class="stat-value text-accent">{{ week_jobs }}</div>
+        <div class="stat-desc">Past 7 days</div>
+    </div>
+
+    <div class="stat place-items-center">
+        <div class="stat-figure text-success">
+            <i data-lucide="activity" class="h-8 w-8"></i>
+        </div>
+        <div class="stat-title">System Status</div>
+        {% if latest_scrape %}
+            {% if latest_scrape.status == 'completed' %}
+            <div class="stat-value text-sm text-success flex items-center gap-1">
+                <i data-lucide="check-circle" class="h-4 w-4"></i>
+                Online
+            </div>
+            <div class="stat-desc text-center">
+                <div class="text-xs">
+                    Last updated: {{ latest_scrape.completed_at.strftime('%H:%M') if latest_scrape.completed_at else 'Unknown' }}
+                </div>
+                <div class="text-xs font-medium text-success">
+                    {{ latest_scrape.new_jobs or 0 }} new positions found
+                </div>
+            </div>
+            {% elif latest_scrape.status == 'started' %}
+            <div class="stat-value text-sm text-warning flex items-center gap-1">
+                <span class="loading loading-spinner loading-xs"></span>
+                Scanning
+            </div>
+            <div class="stat-desc">Searching for new positions...</div>
+            {% elif latest_scrape.status == 'failed' %}
+            <div class="stat-value text-sm text-error flex items-center gap-1">
+                <i data-lucide="alert-triangle" class="h-4 w-4"></i>
+                Error
+            </div>
+            <div class="stat-desc">System maintenance needed</div>
+            {% else %}
+            <div class="stat-value text-sm text-info flex items-center gap-1">
+                <i data-lucide="pause" class="h-4 w-4"></i>
+                {{ latest_scrape.status.title() }}
+            </div>
+            <div class="stat-desc">Status monitoring</div>
+            {% endif %}
+        {% else %}
+        <div class="stat-value text-sm text-warning flex items-center gap-1">
+            <i data-lucide="settings" class="h-4 w-4"></i>
+            Setup
+        </div>
+        <div class="stat-desc">Initializing job scanner</div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    // Initialize Lucide icons for this stats component
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
+</script> 

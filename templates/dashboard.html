@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}YotCrew.app{% endblock %}
+
+{% block content %}
+<!-- Dashboard with Logo -->
+<div class="container mx-auto p-4">
+    <!-- Navigation Header with Logo -->
+    <nav class="navbar bg-base-100 shadow-lg rounded-lg mb-6 min-h-28 py-4">
+        <div class="navbar-start">
+            <a href="/" class="btn btn-ghost normal-case text-xl p-2">
+                <img src="/static/logo.png" alt="YotCrew.app" class="h-24 w-24 rounded-full object-cover">
+            </a>
+        </div>
+        <div class="navbar-center hidden lg:flex">
+            <p class="text-base-content/70 text-sm">Latest yacht crew opportunities</p>
+        </div>
+        <div class="navbar-end">
+            <a href="/" class="btn btn-primary btn-sm">
+                🔍 Go to Interactive Jobs Page
+            </a>
+        </div>
+    </nav>
+    
+    <!-- Simple Jobs Grid - Cards Only -->
+    <div id="jobs-container" 
+         hx-get="/htmx/jobs-table?limit=50" 
+         hx-trigger="load"
+         hx-target="this"
+         hx-swap="innerHTML">
+        <div class="flex justify-center items-center h-64">
+            <div class="loading loading-spinner loading-lg"></div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Auto-refresh dashboard stats
+    setInterval(function() {
+        const statsElement = document.getElementById('dashboard-stats');
+        if (statsElement) {
+            htmx.trigger(statsElement, 'refresh');
+        }
+    }, 60000); // Every minute
+    
+    // Initialize icons after content loads
+    document.addEventListener('htmx:afterSwap', function() {
+        lucide.createIcons();
+    });
+</script>
+{% endblock %} 
