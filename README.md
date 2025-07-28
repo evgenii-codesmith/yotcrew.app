@@ -1,43 +1,57 @@
-# 🛥️ Yacht Jobs Dashboard
+# 🛥️ YotCrew.app
 
-A modern, real-time yacht job monitoring dashboard built with **FastAPI**, **HTMX**, **Tailwind CSS**, and **DaisyUI**. Automatically scrapes and displays yacht crew positions from top industry platforms.
+A modern, interactive yacht job platform built with **FastAPI**, **Alpine.js**, **HTMX**, **Tailwind CSS**, and **DaisyUI**. Automatically scrapes and displays yacht crew positions from top industry platforms with enhanced user interactivity.
 
-![Yacht Jobs Dashboard](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=FastAPI&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=FastAPI&logoColor=white)
+![Alpine.js](https://img.shields.io/badge/Alpine.js-8BC34A?style=for-the-badge&logo=Alpine.js&logoColor=white)
 ![HTMX](https://img.shields.io/badge/HTMX-334155?style=for-the-badge&logo=html5&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
 ## ✨ Features
 
-- **🔄 Real-time Job Scraping**: Automatically scrapes yacht jobs from Yotspot every 45 minutes
-- **⚡ HTMX-Powered UI**: Smooth, interactive interface without JavaScript frameworks
-- **🎨 Modern Design**: Beautiful responsive design with Tailwind CSS and DaisyUI
-- **🔍 Advanced Filtering**: Search by job type, location, vessel size, department, and more
-- **📊 Dashboard Analytics**: Real-time statistics and job market insights
+### 🚀 Interactive Frontend
+- **🎯 Alpine.js Integration**: Reactive components for job cards, filters, and search
+- **📱 Expandable Job Cards**: Click to expand descriptions with smooth animations
+- **⭐ Save/Bookmark System**: Mark favorite jobs for later review
+- **☑️ Multi-select Comparison**: Select multiple jobs to compare side-by-side
+- **🔍 Real-time Filtering**: Instant search and filter without page reloads
+- **🏷️ Quick Filter Tags**: One-click filtering by department and vessel type
+- **📊 Dynamic Sorting**: Sort by title, salary, or posting date
+
+### 🔧 Backend Capabilities
+- **🔄 Automated Scraping**: Scrapes yacht jobs from Yotspot every 45 minutes
+- **⚡ HTMX-Powered**: Seamless partial page updates
+- **🎨 Modern Themes**: Beautiful DaisyUI themes (currently: Cupcake)
 - **🛥️ Yacht-Specific Categories**: Deck, Interior, Engineering, and Galley positions
-- **📱 Mobile Responsive**: Works perfectly on all devices
-- **🌙 Theme Support**: Multiple themes including light/dark modes
+- **📱 Mobile Responsive**: Perfect experience across all devices
+- **🌈 Theme Switching**: Easy theme customization
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 
-- Python 3.11+
-- pip
+- **Python 3.11+**
+- **Conda** (recommended) or pip
 
 ### Installation
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
-   cd ProjectYachtJobs
+   git clone https://github.com/evgenii-codesmith/yotcrew.app.git
+   cd yotcrew.app
    ```
 
-2. **Install dependencies**
+2. **Set up environment**
    ```bash
+   # Using Conda (recommended)
+   conda create -n yachtjobs python=3.11
+   conda activate yachtjobs
+   
+   # Install dependencies
    pip install -r requirements.txt
    ```
 
-3. **Create sample data** (optional but recommended for testing)
+3. **Create sample data** (optional but recommended)
    ```bash
    python create_sample_data.py
    ```
@@ -45,8 +59,6 @@ A modern, real-time yacht job monitoring dashboard built with **FastAPI**, **HTM
 4. **Start the application**
    ```bash
    python run.py
-   # OR
-   uvicorn main:app --reload
    ```
 
 5. **Open your browser**
@@ -57,51 +69,88 @@ A modern, real-time yacht job monitoring dashboard built with **FastAPI**, **HTM
 ## 📁 Project Structure
 
 ```
-ProjectYachtJobs/
+yotcrew.app/
 ├── app/
 │   ├── __init__.py
 │   ├── database.py          # Database configuration
-│   ├── models.py            # SQLAlchemy models
+│   ├── models.py            # SQLAlchemy models (Job, ScrapingJob)
 │   ├── scraper.py           # Yotspot scraper
 │   └── scheduler.py         # Background job scheduler
 ├── templates/
-│   ├── base.html           # Base template with HTMX/Tailwind
-│   ├── dashboard.html      # Main dashboard
-│   ├── jobs.html           # Jobs listing page
+│   ├── base.html           # Base template with Alpine.js/HTMX/Tailwind
+│   ├── dashboard.html      # Simple dashboard overview
+│   ├── jobs.html           # Main interactive jobs page
 │   └── partials/           # HTMX partial templates
-│       ├── jobs_table.html
-│       ├── job_card.html
+│       ├── jobs_table.html # Interactive job cards with Alpine.js
+│       ├── job_card.html   # Individual job card
 │       └── dashboard_stats.html
-├── static/                 # Static files (CSS, JS)
-├── main.py                 # FastAPI application
-├── requirements.txt        # Python dependencies
-├── Dockerfile             # Docker configuration
-├── create_sample_data.py   # Sample data script
-├── test_scraper.py        # Scraper testing
-└── run.py                 # Application runner
+├── static/                 # Static assets
+│   ├── logo.png           # YotCrew.app logo
+│   ├── favicon.svg        # Site favicon
+│   └── favicon.ico        # Alternative favicon
+├── DesignSpecs/           # Project documentation
+├── main.py                # FastAPI application
+├── requirements.txt       # Python dependencies
+├── run.py                # Application runner
+└── yacht_jobs.db         # SQLite database
 ```
 
 ## 🛠️ Technology Stack
 
 ### Backend
-- **FastAPI**: Modern Python web framework
-- **SQLAlchemy**: Database ORM
-- **SQLite**: Default database (easily configurable)
-- **APScheduler**: Background job scheduling
-- **Beautiful Soup**: Web scraping
-- **Requests**: HTTP client
+- **FastAPI**: Modern Python web framework with async support
+- **SQLAlchemy**: Database ORM with relationship management
+- **SQLite**: Lightweight database (production-ready for small to medium loads)
+- **APScheduler**: Background job scheduling for automated scraping
+- **Beautiful Soup**: Web scraping and HTML parsing
+- **Requests**: HTTP client with session management
 
 ### Frontend
-- **HTMX**: Dynamic HTML without JavaScript
+- **Alpine.js**: Lightweight reactive framework for interactivity
+- **HTMX**: Dynamic HTML updates without full page reloads
 - **Tailwind CSS**: Utility-first CSS framework
-- **DaisyUI**: Tailwind CSS component library
-- **Jinja2**: Template engine
+- **DaisyUI**: Beautiful component library with theme support
+- **Jinja2**: Server-side template engine
 
-### Features
-- **Responsive Design**: Mobile-first approach
-- **Real-time Updates**: HTMX-powered live updates
-- **Rate-Limited Scraping**: Respectful scraping with delays
-- **Background Processing**: Scheduled scraping jobs
+### Interactive Features (Alpine.js)
+- **Job Cards**: Expandable descriptions, save/bookmark functionality
+- **Multi-select**: Compare multiple jobs with floating panel
+- **Real-time Filters**: Search, department, vessel type, location
+- **Dynamic Sorting**: Client-side sorting with server validation
+- **Quick Actions**: Copy job links, share functionality
+- **Filter Status**: Visual feedback on active filters with clear options
+
+## 🎯 Pages & Routes
+
+### Main Routes
+- **`/`** - Interactive jobs page (Alpine.js powered)
+- **`/dashboard`** - Simple dashboard overview
+- **`/health`** - Health check endpoint
+
+### API Endpoints
+- **`GET /api/jobs`** - Get jobs with filtering and sorting
+- **`POST /api/scrape`** - Trigger manual scraping
+- **`GET /api/scrape/status`** - Get scraping status
+
+### HTMX Endpoints
+- **`GET /htmx/jobs-table`** - Jobs table with interactive cards
+- **`GET /htmx/dashboard-stats`** - Dashboard statistics
+
+## 🎨 Current Theme: Cupcake
+
+YotCrew.app uses the **Cupcake** DaisyUI theme featuring:
+- Soft pastel colors (pinks and creams)
+- Light, friendly background
+- Professional yet approachable design
+- Excellent readability and contrast
+
+### Theme Customization
+Easily change themes by modifying `templates/base.html`:
+```html
+<html lang="en" data-theme="cupcake">
+```
+
+Available themes: `cupcake`, `nord`, `abyss`, `coffee`, `dark`, `light`, and more.
 
 ## 🔧 Configuration
 
@@ -125,168 +174,162 @@ MIN_REQUEST_DELAY=2.0
 MAX_REQUEST_DELAY=5.0
 ```
 
-### Scraping Configuration
+## 🔍 Job Categories & Filtering
 
-The application is configured to scrape respectfully:
-- **45-minute intervals** between scraping runs
-- **2-5 second delays** between requests
-- **Maximum 5 pages** per scraping session
-- **User-agent rotation** to appear more human-like
+### Department Categories
+- **⚓ Deck**: Captain, First Mate, Bosun, Deckhand, Navigation
+- **🏠 Interior**: Chief Stewardess, Stewardess, Butler, Housekeeping
+- **🔧 Engineering**: Chief Engineer, Engineer, ETO, Mechanical
+- **👨‍🍳 Galley**: Head Chef, Sous Chef, Cook, Galley Assistant
 
-## 📊 API Endpoints
+### Vessel Types
+- Motor Yacht
+- Sailing Yacht
+- Explorer Yacht
+- Catamaran
+- Superyacht
+- Expedition Vessel
 
-### Web Pages
-- `GET /` - Dashboard
-- `GET /jobs` - Jobs listing
-- `GET /health` - Health check
+### Advanced Filtering
+- **Real-time Search**: Instant results as you type
+- **Location Filtering**: By region, country, or city
+- **Salary Range**: Filter by compensation levels
+- **Job Type**: Permanent, Temporary, Rotational
+- **Experience Level**: Entry, Junior, Senior, Executive
 
-### API Endpoints
-- `GET /api/jobs` - Get jobs with filtering
-- `GET /api/jobs/{job_id}` - Get specific job
-- `POST /api/scrape` - Trigger manual scraping
-- `GET /api/scrape/status` - Get scraping status
+## 🎮 Interactive Features
 
-### HTMX Endpoints
-- `GET /htmx/jobs-table` - Jobs table partial
-- `GET /htmx/job-card/{job_id}` - Job detail modal
-- `GET /htmx/dashboard-stats` - Dashboard statistics
+### Alpine.js Components
 
-## 🔍 Job Categories
-
-The dashboard organizes jobs by yacht industry categories:
-
-- **⚓ Deck**: Captain, First Mate, Bosun, Deckhand
-- **🏠 Interior**: Chief Stewardess, Stewardess, Butler
-- **🔧 Engineering**: Chief Engineer, Engineer, ETO
-- **👨‍🍳 Galley**: Head Chef, Sous Chef, Cook
-
-## 🐳 Docker Deployment
-
-### Build and run with Docker
-
-```bash
-# Build the image
-docker build -t yacht-jobs .
-
-# Run the container
-docker run -p 8000:8000 yacht-jobs
+#### Job Cards (`jobFilters` component)
+```javascript
+// Real-time filtering and search
+x-data="jobFilters()"
+x-model="filters.search"
+@change="applyFilters()"
 ```
 
-### Docker Compose (with Redis)
-
-```yaml
-version: '3.8'
-services:
-  app:
-    build: .
-    ports:
-      - "8000:8000"
-    environment:
-      - REDIS_URL=redis://redis:6379/0
-    depends_on:
-      - redis
-
-  redis:
-    image: redis:alpine
-    ports:
-      - "6379:6379"
+#### Expandable Content
+```javascript
+// Expandable job descriptions
+x-data="{ expanded: false }"
+x-show="expanded"
+x-transition
 ```
 
-## 🧪 Testing
-
-### Test the scraper
-```bash
-python test_scraper.py
+#### Save/Bookmark System
+```javascript
+// Job bookmarking
+x-data="{ saved: false }"
+@click="toggleSave(jobId)"
 ```
 
-### Create sample data
-```bash
-python create_sample_data.py
-```
-
-### Run health check
-```bash
-curl http://localhost:8000/health
+#### Multi-select Comparison
+```javascript
+// Compare multiple jobs
+x-model="selectedJobs"
+x-show="selectedJobs.length > 0"
 ```
 
 ## 🔄 Scraping Details
 
-The scraper targets [Yotspot.com](https://www.yotspot.com/job-search.html) and extracts:
+### Source
+- **Primary**: [Yotspot.com](https://www.yotspot.com/job-search.html)
+- **Categories**: All yacht crew positions
+- **Update Frequency**: Every 45 minutes
+- **Data Extracted**: Title, company, location, salary, description, vessel type
 
-- Job titles and descriptions
-- Company names
-- Vessel types and sizes
-- Locations and start dates
-- Salary information
-- Job types (Permanent, Temporary, Rotational)
-- Department categories
+### Ethical Scraping
+- ✅ **Rate Limited**: 2-5 second delays between requests
+- ✅ **Respectful**: Maximum 5 pages per session
+- ✅ **User-Agent**: Proper browser identification
+- ✅ **Public Data**: Only publicly available job listings
+- ✅ **Error Handling**: Graceful failure management
 
-### Scraping Ethics
-- ✅ Respectful rate limiting (2-5s delays)
-- ✅ User-agent headers
-- ✅ No excessive requests
-- ✅ Public data only
-- ✅ Proper error handling
+## 🐳 Docker Deployment
 
-## 🎨 UI Features
+### Using Docker Compose
 
-### Dashboard
-- Real-time job statistics
-- Quick action buttons
-- Recent jobs preview
-- Job category navigation
-- Market insights
+```yaml
+version: '3.8'
+services:
+  yotcrew:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=False
+      - HOST=0.0.0.0
+    volumes:
+      - ./yacht_jobs.db:/app/yacht_jobs.db
+```
 
-### Jobs Page
-- Advanced filtering system
-- Real-time search (HTMX)
-- Pagination support
-- Detailed job cards
-- Modal job details
+### Build and Run
+```bash
+docker build -t yotcrew-app .
+docker run -p 8000:8000 yotcrew-app
+```
 
-### Design Elements
-- Modern yacht-themed design
-- Responsive grid layouts
-- Interactive components
-- Smooth animations
-- Theme switching support
+## 🧪 Testing & Development
+
+### Test Scraper
+```bash
+python test_scraper.py
+```
+
+### Create Sample Data
+```bash
+python create_sample_data.py
+```
+
+### Development Mode
+```bash
+# With auto-reload
+python run.py
+# OR
+uvicorn main:app --reload
+```
 
 ## 🚀 Production Deployment
 
-### Environment Setup
-1. Set `DEBUG=False`
-2. Configure production database
-3. Set proper `SECRET_KEY`
-4. Configure Redis for caching
-5. Set up reverse proxy (nginx)
+### Render.com (Recommended)
+The project includes `render.yaml` for easy deployment to Render:
 
-### Security Considerations
-- Use environment variables for secrets
-- Enable HTTPS in production
-- Configure CORS properly
-- Set up rate limiting
-- Monitor scraping activities
+1. Connect your GitHub repository
+2. Render will automatically detect the configuration
+3. Environment variables are pre-configured
+4. Automatic deployments on git push
+
+### Manual Production Setup
+1. Set `DEBUG=False`
+2. Configure production database (PostgreSQL recommended)
+3. Set up proper secrets management
+4. Configure reverse proxy (nginx)
+5. Enable HTTPS
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+1. **Fork** the repository
+2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
+3. **Commit** your changes (`git commit -m 'Add amazing feature'`)
+4. **Push** to the branch (`git push origin feature/amazing-feature`)
+5. **Open** a Pull Request
 
-## 📝 License
+## 📄 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## 🙏 Acknowledgments
 
-- [Yotspot](https://www.yotspot.com) for yacht job listings
-- [FastAPI](https://fastapi.tiangolo.com/) for the excellent framework
-- [HTMX](https://htmx.org/) for modern web interactions
-- [Tailwind CSS](https://tailwindcss.com/) for utility-first styling
-- [DaisyUI](https://daisyui.com/) for beautiful components
+- **[Yotspot](https://www.yotspot.com)** - Primary source for yacht job listings
+- **[FastAPI](https://fastapi.tiangolo.com/)** - Modern Python web framework
+- **[Alpine.js](https://alpinejs.dev/)** - Lightweight reactive framework
+- **[HTMX](https://htmx.org/)** - Modern web interactions
+- **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first styling
+- **[DaisyUI](https://daisyui.com/)** - Beautiful component library
 
 ---
 
-Made with ❤️ for the yacht industry professionals worldwide 🛥️ 
+**Made with ❤️ for yacht crew professionals worldwide** 🛥️
+
+**Repository**: [https://github.com/evgenii-codesmith/yotcrew.app](https://github.com/evgenii-codesmith/yotcrew.app) 
