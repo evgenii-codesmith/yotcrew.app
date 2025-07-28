@@ -44,6 +44,9 @@
 
     <!-- Global Alpine.js Components for HTMX partials -->
     <script>
+        // Cache-busting: Force refresh Alpine.js components - v2.0
+        console.log('🔄 Cache-busting Alpine.js components - Version 2.0');
+        
         // Global Alpine.js components available to all templates and partials
         document.addEventListener('alpine:init', () => {
             console.log('🎿 Alpine.js initializing global components...');
@@ -249,7 +252,7 @@
                     saved: false,
                     cardYachtImage: {
                         url: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=200&fit=crop&crop=center',
-                        alt: 'Luxury Yacht'
+                        alt: 'Luxury Superyacht Side View'
                     },
                     
                     init() {
@@ -271,23 +274,23 @@
                             const images = [
                                 {
                                     url: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=200&fit=crop&crop=center",
-                                    alt: "Luxury Motor Yacht"
+                                    alt: "Luxury Superyacht Side View"
                                 },
                                 {
                                     url: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=200&fit=crop&crop=center",
-                                    alt: "Superyacht in Harbor"
+                                    alt: "Superyacht in Marina"
                                 },
                                 {
                                     url: "https://images.unsplash.com/photo-1582967788606-a171c1080cb0?w=400&h=200&fit=crop&crop=center",
-                                    alt: "Modern Sailing Yacht"
+                                    alt: "Modern Superyacht Bow View"
                                 },
                                 {
                                     url: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=200&fit=crop&crop=center",
-                                    alt: "Explorer Yacht"
+                                    alt: "Superyacht Stern View"
                                 },
                                 {
                                     url: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=200&fit=crop&crop=center",
-                                    alt: "Catamaran Superyacht"
+                                    alt: "White Superyacht Profile"
                                 }
                             ];
                             const randomIndex = Math.floor(Math.random() * images.length);
