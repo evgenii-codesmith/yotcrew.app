@@ -4,76 +4,101 @@
 
 {% block content %}
 <div class="space-y-6">
-    <!-- Navigation Header with Logo -->
-    <nav class="navbar bg-base-100 shadow-lg rounded-lg mb-6 min-h-28 py-4">
-        <div class="navbar-start">
-            <a href="/" class="btn btn-ghost normal-case text-xl p-2">
-                <img src="/static/logo.png" alt="YotCrew.app" class="h-24 w-24 rounded-full object-cover">
-            </a>
-        </div>
-        <div class="navbar-center hidden lg:flex">
-            <p class="text-base-content/70 text-sm">Find your perfect yacht position</p>
-        </div>
-        <div class="navbar-end">
-            <div class="dropdown dropdown-end">
-                <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" /></svg>
-                </div>
-                <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
-                    <li><a href="/">🏠 Home</a></li>
-                    <li><a href="/dashboard">📊 Dashboard</a></li>
-                    <li><a href="#" onclick="location.reload()">🔄 Refresh</a></li>
-                </ul>
+    <!-- Unified Header with Navigation and Filters -->
+    <div class="bg-base-100 shadow-xl rounded-lg overflow-hidden" x-data="jobFilters()">
+        <!-- Top Navigation Bar -->
+        <nav class="navbar bg-base-200/50 px-6 py-4">
+            <div class="navbar-start">
+                <a href="/" class="btn btn-ghost normal-case text-xl p-2">
+                    <img src="/static/logo.png" alt="YotCrew.app" class="h-16 w-16 rounded-full object-cover">
+                    <span class="ml-2 font-bold text-lg hidden sm:block">YotCrew.app</span>
+                </a>
             </div>
-        </div>
-    </nav>
+            <div class="navbar-center hidden lg:flex">
+                <div class="text-center">
+                    <p class="text-base-content/70 text-sm">Find your perfect yacht position</p>
+                    <div class="text-xs text-base-content/50" x-show="searchResults.total > 0">
+                        <span x-text="searchResults.total || '0'"></span> opportunities available
+                    </div>
+                </div>
+            </div>
+            <div class="navbar-end flex items-center gap-3">
+                <!-- Quick Actions -->
+                <button class="btn btn-primary btn-sm" 
+                        hx-post="/api/scrape" 
+                        hx-confirm="Refresh job listings?"
+                        hx-target="#refresh-status">
+                    🔄 Refresh
+                </button>
+                
+                <!-- Menu Dropdown -->
+                <div class="dropdown dropdown-end">
+                    <div tabindex="0" role="button" class="btn btn-ghost btn-circle btn-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" /></svg>
+                    </div>
+                    <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+                        <li><a href="/">🏠 Home</a></li>
+                        <li><a href="/dashboard">📊 Dashboard</a></li>
+                        <li><a href="#" onclick="location.reload()">🔄 Refresh</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
 
-    <!-- Page Header -->
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div class="hidden md:block">
-            <!-- This is hidden on larger screens since we have the nav -->
-        </div>
-        
-        <div class="flex gap-2">
-            <button class="btn btn-primary" 
-                    hx-post="/api/scrape" 
-                    hx-confirm="Refresh job listings?"
-                    hx-target="#refresh-status">
-                🔄 Refresh Jobs
-            </button>
-        </div>
-    </div>
-    
-    <div id="refresh-status"></div>
-
-    <!-- Enhanced Search and Filters with Alpine.js -->
-    <div class="card bg-base-100 shadow-xl" x-data="jobFilters()">
-        <div class="card-body">
-            <!-- Filter Status Bar -->
+        <!-- Integrated Search and Filters Section -->
+        <div class="px-6 py-4 bg-gradient-to-r from-base-100 to-base-200/30">
+            <!-- Filter Status and Actions Bar -->
             <div class="flex justify-between items-center mb-4" x-show="hasActiveFilters || searchResults.total > 0">
-                <div class="text-sm text-base-content/70">
-                    <span x-text="searchResults.total || '0'"></span> jobs found
-                    <span x-show="hasActiveFilters" class="text-primary">• Filters active</span>
+                <div class="flex items-center gap-4">
+                    <div class="text-sm text-base-content/70">
+                        <span class="font-semibold" x-text="searchResults.total || '0'"></span> jobs found
+                        <span x-show="hasActiveFilters" class="text-primary ml-2">• <span x-text="activeFilterCount"></span> filters active</span>
+                    </div>
+                    
+                    <!-- Active Filter Pills -->
+                    <div class="flex flex-wrap gap-1" x-show="hasActiveFilters">
+                        <span x-show="filters.search" 
+                              class="badge badge-primary badge-sm cursor-pointer hover:badge-primary-focus"
+                              @click="filters.search = ''; applyFilters()">
+                            🔍 <span x-text="filters.search.slice(0, 10) + (filters.search.length > 10 ? '...' : '')"></span> ✕
+                        </span>
+                        <span x-show="filters.jobType" 
+                              class="badge badge-secondary badge-sm cursor-pointer hover:badge-secondary-focus"
+                              @click="filters.jobType = ''; applyFilters()">
+                            💼 <span x-text="filters.jobType"></span> ✕
+                        </span>
+                        <span x-show="filters.location" 
+                              class="badge badge-accent badge-sm cursor-pointer hover:badge-accent-focus"
+                              @click="filters.location = ''; applyFilters()">
+                            📍 <span x-text="filters.location"></span> ✕
+                        </span>
+                        <span x-show="filters.department" 
+                              class="badge badge-info badge-sm cursor-pointer hover:badge-info-focus"
+                              @click="filters.department = ''; applyFilters()">
+                            👥 <span x-text="filters.department"></span> ✕
+                        </span>
+                    </div>
                 </div>
                 
                 <button @click="clearAllFilters()" 
                         x-show="hasActiveFilters"
-                        class="btn btn-ghost btn-xs">
-                    Clear All Filters
+                        class="btn btn-ghost btn-sm">
+                    Clear All
                 </button>
             </div>
             
+            <!-- Main Search and Filter Form -->
             <form hx-get="/htmx/jobs-table" 
                   hx-target="#jobs-container" 
                   hx-trigger="submit"
                   @submit="updateResults()">
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Primary Search Row -->
+                <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3 mb-4">
                     <!-- Enhanced Search -->
-                    <div class="form-control">
+                    <div class="form-control md:col-span-2">
                         <label class="label">
-                            <span class="label-text">🔍 Search</span>
-                            <span x-show="filters.search" class="label-text-alt text-primary">Active</span>
+                            <span class="label-text font-medium">🔍 Search Jobs</span>
                         </label>
                         <div class="relative">
                             <input type="text" 
@@ -81,134 +106,179 @@
                                    x-model="filters.search"
                                    @input.debounce.300ms="applyFilters()"
                                    placeholder="Job title, company, description..." 
-                                   class="input input-bordered w-full" />
+                                   class="input input-bordered w-full pr-8" />
                             <button type="button"
                                     @click="filters.search = ''; applyFilters()"
                                     x-show="filters.search"
-                                    class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                                    class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors">
                                 ✕
                             </button>
                         </div>
                     </div>
 
-                    <!-- Enhanced Job Type Filter -->
+                    <!-- Job Type Filter -->
                     <div class="form-control">
                         <label class="label">
-                            <span class="label-text">💼 Job Type</span>
-                            <span x-show="filters.jobType" class="label-text-alt text-primary">Active</span>
+                            <span class="label-text font-medium">💼 Type</span>
                         </label>
                         <select name="job_type" 
                                 x-model="filters.jobType"
                                 @change="applyFilters()"
-                                class="select select-bordered">
+                                class="select select-bordered select-sm">
                             <option value="">All Types</option>
                             <option value="Permanent">Permanent</option>
                             <option value="Temporary">Temporary</option>
                             <option value="Rotational">Rotational</option>
                             <option value="Seasonal">Seasonal</option>
-                            <option value="Contract">Contract</option>
                         </select>
                     </div>
 
-                    <!-- Enhanced Location Filter -->
+                    <!-- Location Filter -->
                     <div class="form-control">
                         <label class="label">
-                            <span class="label-text">📍 Location</span>
-                            <span x-show="filters.location" class="label-text-alt text-primary">Active</span>
+                            <span class="label-text font-medium">📍 Location</span>
                         </label>
                         <select name="location" 
                                 x-model="filters.location"
                                 @change="applyFilters()"
-                                class="select select-bordered">
+                                class="select select-bordered select-sm">
                             <option value="">All Locations</option>
                             <option value="Mediterranean">Mediterranean</option>
                             <option value="Caribbean">Caribbean</option>
                             <option value="United States">United States</option>
                             <option value="France">France</option>
-                            <option value="Italy">Italy</option>
-                            <option value="Spain">Spain</option>
-                            <option value="Greece">Greece</option>
                             <option value="Monaco">Monaco</option>
-                        </select>
-                    </div>
-
-                    <!-- Enhanced Vessel Size Filter -->
-                    <div class="form-control">
-                        <label class="label">
-                            <span class="label-text">🛥️ Vessel Size</span>
-                            <span x-show="filters.vessel_size" class="label-text-alt text-primary">Active</span>
-                        </label>
-                        <select name="vessel_size" 
-                                x-model="filters.vessel_size"
-                                @change="applyFilters()"
-                                class="select select-bordered">
-                            <option value="">All Sizes</option>
-                            <option value="0-30m">0-30m</option>
-                            <option value="31-39m">31-39m</option>
-                            <option value="40-49m">40-49m</option>
-                            <option value="50-74m">50-74m</option>
-                            <option value="75-94m">75-94m</option>
-                            <option value="95m+">95m+</option>
                         </select>
                     </div>
 
                     <!-- Sort Filter -->
                     <div class="form-control">
                         <label class="label">
-                            <span class="label-text">📊 Sort By</span>
-                            <span x-show="filters.sort" class="label-text-alt text-primary">Active</span>
+                            <span class="label-text font-medium">📊 Sort</span>
                         </label>
                         <select name="sort" 
                                 x-model="filters.sort"
                                 @change="applyFilters()"
-                                class="select select-bordered">
-                            <option value="">Default Order</option>
-                            <option value="posted_at">Latest First</option>
-                            <option value="title">Job Title A-Z</option>
-                            <option value="salary">Highest Salary</option>
+                                class="select select-bordered select-sm">
+                            <option value="">Latest</option>
+                            <option value="posted_at">Date Posted</option>
+                            <option value="title">Job Title</option>
+                            <option value="salary">Salary</option>
                         </select>
                     </div>
                 </div>
 
-                <!-- Interactive Quick Filter Badges -->
-                <div class="flex flex-wrap gap-2 mt-4">
-                    <button @click="setQuickFilter('department', 'Deck')" 
-                            :class="filters.department === 'Deck' ? 'badge-primary' : 'badge-outline hover:badge-primary'"
-                            class="badge cursor-pointer transition-colors">
-                        ⚓ Deck
-                    </button>
-                    <button @click="setQuickFilter('department', 'Interior')" 
-                            :class="filters.department === 'Interior' ? 'badge-primary' : 'badge-outline hover:badge-primary'"
-                            class="badge cursor-pointer transition-colors">
-                        🏠 Interior
-                    </button>
-                    <button @click="setQuickFilter('department', 'Engineering')" 
-                            :class="filters.department === 'Engineering' ? 'badge-primary' : 'badge-outline hover:badge-primary'"
-                            class="badge cursor-pointer transition-colors">
-                        🔧 Engineering
-                    </button>
-                    <button @click="setQuickFilter('department', 'Galley')" 
-                            :class="filters.department === 'Galley' ? 'badge-primary' : 'badge-outline hover:badge-primary'"
-                            class="badge cursor-pointer transition-colors">
-                        👨‍🍳 Galley
-                    </button>
-                    <button @click="setQuickFilter('vessel_type', 'Motor')" 
-                            :class="filters.vessel_type === 'Motor' ? 'badge-secondary' : 'badge-outline hover:badge-secondary'"
-                            class="badge cursor-pointer transition-colors">
-                        🛥️ Motor Yacht
-                    </button>
-                    <button @click="setQuickFilter('vessel_type', 'Sailing')" 
-                            :class="filters.vessel_type === 'Sailing' ? 'badge-secondary' : 'badge-outline hover:badge-secondary'"
-                            class="badge cursor-pointer transition-colors">
-                        ⛵ Sailing Yacht
-                    </button>
+                <!-- Secondary Filters Row -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-4">
+                    <!-- Vessel Size Filter -->
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-medium">🛥️ Vessel Size</span>
+                        </label>
+                        <select name="vessel_size" 
+                                x-model="filters.vessel_size"
+                                @change="applyFilters()"
+                                class="select select-bordered select-sm">
+                            <option value="">All Sizes</option>
+                            <option value="0-30m">0-30m</option>
+                            <option value="31-39m">31-39m</option>
+                            <option value="40-49m">40-49m</option>
+                            <option value="50-74m">50-74m</option>
+                            <option value="75m+">75m+</option>
+                        </select>
+                    </div>
+
+                    <!-- Department Filter -->
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-medium">👥 Department</span>
+                        </label>
+                        <select name="department" 
+                                x-model="filters.department"
+                                @change="applyFilters()"
+                                class="select select-bordered select-sm">
+                            <option value="">All Departments</option>
+                            <option value="Deck">Deck</option>
+                            <option value="Interior">Interior</option>
+                            <option value="Engineering">Engineering</option>
+                            <option value="Galley">Galley</option>
+                        </select>
+                    </div>
+
+                    <!-- Vessel Type Filter -->
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-medium">⛵ Vessel Type</span>
+                        </label>
+                        <select name="vessel_type" 
+                                x-model="filters.vessel_type"
+                                @change="applyFilters()"
+                                class="select select-bordered select-sm">
+                            <option value="">All Types</option>
+                            <option value="Motor">Motor Yacht</option>
+                            <option value="Sailing">Sailing Yacht</option>
+                            <option value="Explorer">Explorer</option>
+                            <option value="Catamaran">Catamaran</option>
+                        </select>
+                    </div>
                 </div>
 
-                <!-- Submit button (hidden, form submits on change) -->
+                <!-- Quick Filter Badges -->
+                <div class="border-t border-base-300 pt-4">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="text-sm font-medium text-base-content/70">Quick Filters:</span>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <!-- Department Quick Filters -->
+                        <button type="button" @click="setQuickFilter('department', 'Deck')" 
+                                :class="filters.department === 'Deck' ? 'badge-primary' : 'badge-outline hover:badge-primary'"
+                                class="badge cursor-pointer transition-all duration-200">
+                            ⚓ Deck
+                        </button>
+                        <button type="button" @click="setQuickFilter('department', 'Interior')" 
+                                :class="filters.department === 'Interior' ? 'badge-primary' : 'badge-outline hover:badge-primary'"
+                                class="badge cursor-pointer transition-all duration-200">
+                            🏠 Interior
+                        </button>
+                        <button type="button" @click="setQuickFilter('department', 'Engineering')" 
+                                :class="filters.department === 'Engineering' ? 'badge-primary' : 'badge-outline hover:badge-primary'"
+                                class="badge cursor-pointer transition-all duration-200">
+                            🔧 Engineering
+                        </button>
+                        <button type="button" @click="setQuickFilter('department', 'Galley')" 
+                                :class="filters.department === 'Galley' ? 'badge-primary' : 'badge-outline hover:badge-primary'"
+                                class="badge cursor-pointer transition-all duration-200">
+                            👨‍🍳 Galley
+                        </button>
+                        
+                        <!-- Vessel Type Quick Filters -->
+                        <div class="divider divider-horizontal mx-1"></div>
+                        <button type="button" @click="setQuickFilter('vessel_type', 'Motor')" 
+                                :class="filters.vessel_type === 'Motor' ? 'badge-secondary' : 'badge-outline hover:badge-secondary'"
+                                class="badge cursor-pointer transition-all duration-200">
+                            🛥️ Motor
+                        </button>
+                        <button type="button" @click="setQuickFilter('vessel_type', 'Sailing')" 
+                                :class="filters.vessel_type === 'Sailing' ? 'badge-secondary' : 'badge-outline hover:badge-secondary'"
+                                class="badge cursor-pointer transition-all duration-200">
+                            ⛵ Sailing
+                        </button>
+                        <button type="button" @click="setQuickFilter('vessel_type', 'Explorer')" 
+                                :class="filters.vessel_type === 'Explorer' ? 'badge-secondary' : 'badge-outline hover:badge-secondary'"
+                                class="badge cursor-pointer transition-all duration-200">
+                            🧭 Explorer
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Hidden submit button -->
                 <input type="submit" style="display: none;" />
             </form>
         </div>
     </div>
+    
+    <!-- Status Messages -->
+    <div id="refresh-status"></div>
 
     <!-- Jobs Container -->
     <div id="jobs-container" 
@@ -256,48 +326,19 @@
                 loading: false
             },
             
-
-            
             get hasActiveFilters() {
-                const filterValues = Object.entries(this.filters)
-                    .filter(([key]) => key !== 'sort') // Don't count sort as an active filter
-                    .map(([, value]) => value);
-                return filterValues.some(value => value !== '');
+                return Object.values(this.filters).some(value => value !== '');
             },
             
-            applyFilters() {
-                // Update form values and trigger HTMX
-                const form = document.querySelector('form[hx-get="/htmx/jobs-table"]');
-                if (form) {
-                    const formData = new FormData(form);
-                    formData.set('search', this.filters.search);
-                    formData.set('job_type', this.filters.jobType);
-                    formData.set('location', this.filters.location);
-                    formData.set('vessel_size', this.filters.vessel_size);
-                    formData.set('vessel_type', this.filters.vessel_type);
-                    formData.set('department', this.filters.department);
-                    
-                    // Add sort parameter if it exists
-                    if (this.filters.sort) {
-                        formData.set('sort', this.filters.sort);
-                    }
-                    
-                    this.searchResults.loading = true;
-                    
-                    htmx.ajax('GET', '/htmx/jobs-table?' + new URLSearchParams(formData).toString(), {
-                        target: '#jobs-container',
-                        swap: 'innerHTML'
-                    }).then(() => {
-                        this.searchResults.loading = false;
-                    });
-                }
+            get activeFilterCount() {
+                return Object.values(this.filters).filter(value => value !== '').length;
             },
             
-            setQuickFilter(filterType, value) {
-                if (this.filters[filterType] === value) {
-                    this.filters[filterType] = ''; // Toggle off if already selected
+            setQuickFilter(type, value) {
+                if (this.filters[type] === value) {
+                    this.filters[type] = '';
                 } else {
-                    this.filters[filterType] = value;
+                    this.filters[type] = value;
                 }
                 this.applyFilters();
             },
@@ -315,11 +356,35 @@
                 this.applyFilters();
             },
             
+            applyFilters() {
+                this.searchResults.loading = true;
+                
+                // Build query parameters
+                const params = new URLSearchParams();
+                Object.entries(this.filters).forEach(([key, value]) => {
+                    if (value) {
+                        // Map frontend filter names to backend parameter names
+                        const paramMap = {
+                            'jobType': 'job_type',
+                            'vessel_size': 'vessel_size',
+                            'vessel_type': 'vessel_type'
+                        };
+                        const paramName = paramMap[key] || key;
+                        params.append(paramName, value);
+                    }
+                });
+                
+                // Trigger HTMX request with filters
+                htmx.ajax('GET', `/htmx/jobs-table?${params.toString()}`, {
+                    target: '#jobs-container'
+                }).then(() => {
+                    this.searchResults.loading = false;
+                });
+            },
+            
             updateResults() {
                 // Called when form is submitted
-                setTimeout(() => {
-                    this.searchResults.loading = false;
-                }, 500);
+                this.searchResults.loading = false;
             }
         }
     }
