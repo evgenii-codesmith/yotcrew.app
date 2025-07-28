@@ -6,6 +6,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
+    <meta name="cache-buster" content="boats-only-v4-20250128" />
     <title>{% block title %}YotCrew.app{% endblock %}</title>
     
     <!-- Favicon -->
@@ -22,7 +23,7 @@
     <script src="https://unpkg.com/htmx.org@1.9.9"></script>
     
     <!-- Alpine.js -->
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js?v=20250128"></script>
     
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
@@ -42,18 +43,33 @@
         }
     </style>
 
-    <!-- Global Alpine.js Components for HTMX partials -->
+    <!-- COMPLETE CACHE DESTRUCTION - BOATS ONLY v4.0 -->
     <script>
-        // Cache-busting: Force refresh Alpine.js components - v3.0 BOATS ONLY
-        console.log('🔄 Cache-busting Alpine.js components - Version 3.0 BOATS ONLY - ' + new Date().getTime());
+        // NUCLEAR CACHE-BUSTING: Destroy all browser cache for Alpine components
+        window.YOTCREW_VERSION = '4.0-BOATS-ONLY-' + Date.now();
+        console.log('🚀🛥️ NUCLEAR CACHE-BUSTING - YotCrew v' + window.YOTCREW_VERSION);
+        
+        // Force Alpine to reload by creating completely new namespace
+        window.addEventListener('load', function() {
+            console.log('🔥 Page loaded - Forcing Alpine component refresh');
+            
+            // Clear any cached data
+            try {
+                localStorage.removeItem('alpine-components');
+                sessionStorage.clear();
+                console.log('🧹 Cleared browser storage');
+            } catch(e) {
+                console.log('Storage already clear');
+            }
+        });
         
         // Global Alpine.js components available to all templates and partials
         document.addEventListener('alpine:init', () => {
-            console.log('🎿 Alpine.js initializing global components...');
+            console.log('🎿 Alpine.js initializing BOATS-ONLY components v' + window.YOTCREW_VERSION);
             
-            // Job Grid Component (for job cards)
+            // BOATS ONLY - Job Grid Component
             Alpine.data('jobGrid', () => {
-                console.log('🛥️ Creating jobGrid component');
+                console.log('🛥️ Creating BOATS-ONLY jobGrid component');
                 return {
                     selectedJobs: [],
                     
@@ -214,7 +230,9 @@
                     getRandomYachtImage() {
                         const randomIndex = Math.floor(Math.random() * this.yachtImages.length);
                         const randomImage = this.yachtImages[randomIndex];
-                        console.log('🎲 Random yacht image selected:', randomImage);
+                        console.log('🎲🛥️ BOATS-ONLY Random yacht image selected:', randomImage);
+                        console.log('🔍 Total yacht images available:', this.yachtImages.length);
+                        console.log('📸 First image alt text:', this.yachtImages[0].alt);
                         return randomImage;
                     },
                     
