@@ -4,14 +4,14 @@
     {% for job in jobs %}
     <!-- Interactive Job Card -->
     <div class="card bg-base-100 w-full shadow-sm hover:shadow-lg transition-all duration-300"
-         x-data="jobCard({{ job.id }}, '{{ job.title }}', `{{ job.description|replace('`', '') if job.description else '' }}`)"
+         x-data="jobCard('{{ job.id }}', '{{ job.title }}', `{{ job.description|replace('`', '') if job.description else '' }}`)"
          :class="{ 'ring-2 ring-primary': selected, 'bg-base-200': saved }">
         
         <!-- Card Header with Select Checkbox -->
         <div class="absolute top-2 right-2 z-10 flex gap-2">
             <input type="checkbox" 
                    x-model="selected"
-                   @change="updateSelection({{ job.id }}, $event.target.checked)"
+                   @change="updateSelection('{{ job.id }}', $event.target.checked)"
                    class="checkbox checkbox-primary checkbox-sm bg-white shadow-md"
                    title="Select for comparison">
             
