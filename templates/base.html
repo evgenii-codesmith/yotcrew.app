@@ -46,279 +46,292 @@
     <script>
         // Global Alpine.js components available to all templates and partials
         document.addEventListener('alpine:init', () => {
+            console.log('🎿 Alpine.js initializing global components...');
+            
             // Job Grid Component (for job cards)
-            Alpine.data('jobGrid', () => ({
-                selectedJobs: [],
-                
-                // Yacht images collection for job cards
-                yachtImages: [
-                    {
-                        id: 1,
-                        url: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=200&fit=crop&crop=center",
-                        alt: "Luxury Motor Yacht"
-                    },
-                    {
-                        id: 2,
-                        url: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=200&fit=crop&crop=center",
-                        alt: "Superyacht in Harbor"
-                    },
-                    {
-                        id: 3,
-                        url: "https://images.unsplash.com/photo-1582967788606-a171c1080cb0?w=400&h=200&fit=crop&crop=center",
-                        alt: "Modern Sailing Yacht"
-                    },
-                    {
-                        id: 4,
-                        url: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=200&fit=crop&crop=center",
-                        alt: "Explorer Yacht"
-                    },
-                    {
-                        id: 5,
-                        url: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=200&fit=crop&crop=center",
-                        alt: "Catamaran Superyacht"
-                    },
-                    {
-                        id: 6,
-                        url: "https://images.unsplash.com/photo-1615781222256-cd404c71eb9e?w=400&h=200&fit=crop&crop=center",
-                        alt: "Mega Yacht at Sunset"
-                    },
-                    {
-                        id: 7,
-                        url: "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=400&h=200&fit=crop&crop=center",
-                        alt: "Classic Motor Yacht"
-                    },
-                    {
-                        id: 8,
-                        url: "https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?w=400&h=200&fit=crop&crop=center",
-                        alt: "Sailing Superyacht"
-                    },
-                    {
-                        id: 9,
-                        url: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=200&fit=crop&crop=center",
-                        alt: "Luxury Charter Yacht"
-                    },
-                    {
-                        id: 10,
-                        url: "https://images.unsplash.com/photo-1517101216274-0a676e44e4bd?w=400&h=200&fit=crop&crop=center",
-                        alt: "Sport Fishing Yacht"
-                    },
-                    {
-                        id: 11,
-                        url: "https://images.unsplash.com/photo-1615781222256-cd404c71eb9e?w=400&h=200&fit=crop&crop=center",
-                        alt: "Mediterranean Superyacht"
-                    },
-                    {
-                        id: 12,
-                        url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=200&fit=crop&crop=center",
-                        alt: "Ocean Explorer"
-                    },
-                    {
-                        id: 13,
-                        url: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=200&fit=crop&crop=center",
-                        alt: "Modern Expedition Yacht"
-                    },
-                    {
-                        id: 14,
-                        url: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=200&fit=crop&crop=center",
-                        alt: "Luxury Motor Yacht"
-                    },
-                    {
-                        id: 15,
-                        url: "https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?w=400&h=200&fit=crop&crop=center",
-                        alt: "Racing Yacht"
-                    },
-                    {
-                        id: 16,
-                        url: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=200&fit=crop&crop=center",
-                        alt: "Charter Superyacht"
-                    },
-                    {
-                        id: 17,
-                        url: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=200&fit=crop&crop=center",
-                        alt: "Twin Hull Catamaran"
-                    },
-                    {
-                        id: 18,
-                        url: "https://images.unsplash.com/photo-1615781222256-cd404c71eb9e?w=400&h=200&fit=crop&crop=center",
-                        alt: "Sunset Cruiser"
-                    },
-                    {
-                        id: 19,
-                        url: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=200&fit=crop&crop=center",
-                        alt: "Ocean Liner Style Yacht"
-                    },
-                    {
-                        id: 20,
-                        url: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=200&fit=crop&crop=center",
-                        alt: "High-Speed Motor Yacht"
-                    },
-                    {
-                        id: 21,
-                        url: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=200&fit=crop&crop=center",
-                        alt: "Flybridge Motor Yacht"
-                    },
-                    {
-                        id: 22,
-                        url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=200&fit=crop&crop=center",
-                        alt: "Explorer Superyacht"
-                    },
-                    {
-                        id: 23,
-                        url: "https://images.unsplash.com/photo-1517101216274-0a676e44e4bd?w=400&h=200&fit=crop&crop=center",
-                        alt: "Sport Yacht"
-                    },
-                    {
-                        id: 24,
-                        url: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=200&fit=crop&crop=center",
-                        alt: "Mega Yacht"
-                    },
-                    {
-                        id: 25,
-                        url: "https://images.unsplash.com/photo-1615781222256-cd404c71eb9e?w=400&h=200&fit=crop&crop=center",
-                        alt: "Luxury Charter Vessel"
-                    },
-                    {
-                        id: 26,
-                        url: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=200&fit=crop&crop=center",
-                        alt: "High-Performance Yacht"
-                    },
-                    {
-                        id: 27,
-                        url: "https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?w=400&h=200&fit=crop&crop=center",
-                        alt: "Classic Sailing Yacht"
-                    },
-                    {
-                        id: 28,
-                        url: "https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?w=400&h=200&fit=crop&crop=center",
-                        alt: "Performance Cruiser"
-                    },
-                    {
-                        id: 29,
-                        url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=200&fit=crop&crop=center",
-                        alt: "Long Range Explorer"
-                    },
-                    {
-                        id: 30,
-                        url: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=200&fit=crop&crop=center",
-                        alt: "Ultimate Superyacht"
-                    }
-                ],
-                
-                getRandomYachtImage() {
-                    const randomIndex = Math.floor(Math.random() * this.yachtImages.length);
-                    return this.yachtImages[randomIndex];
-                },
-                
-                updateSelection(jobId, isSelected) {
-                    if (isSelected) {
-                        if (!this.selectedJobs.includes(jobId)) {
-                            this.selectedJobs.push(jobId);
+            Alpine.data('jobGrid', () => {
+                console.log('🛥️ Creating jobGrid component');
+                return {
+                    selectedJobs: [],
+                    
+                    // Yacht images collection for job cards
+                    yachtImages: [
+                        {
+                            id: 1,
+                            url: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=200&fit=crop&crop=center",
+                            alt: "Luxury Motor Yacht"
+                        },
+                        {
+                            id: 2,
+                            url: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=200&fit=crop&crop=center",
+                            alt: "Superyacht in Harbor"
+                        },
+                        {
+                            id: 3,
+                            url: "https://images.unsplash.com/photo-1582967788606-a171c1080cb0?w=400&h=200&fit=crop&crop=center",
+                            alt: "Modern Sailing Yacht"
+                        },
+                        {
+                            id: 4,
+                            url: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=200&fit=crop&crop=center",
+                            alt: "Explorer Yacht"
+                        },
+                        {
+                            id: 5,
+                            url: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=200&fit=crop&crop=center",
+                            alt: "Catamaran Superyacht"
+                        },
+                        {
+                            id: 6,
+                            url: "https://images.unsplash.com/photo-1615781222256-cd404c71eb9e?w=400&h=200&fit=crop&crop=center",
+                            alt: "Mega Yacht at Sunset"
+                        },
+                        {
+                            id: 7,
+                            url: "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=400&h=200&fit=crop&crop=center",
+                            alt: "Classic Motor Yacht"
+                        },
+                        {
+                            id: 8,
+                            url: "https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?w=400&h=200&fit=crop&crop=center",
+                            alt: "Sailing Superyacht"
+                        },
+                        {
+                            id: 9,
+                            url: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=200&fit=crop&crop=center",
+                            alt: "Luxury Charter Yacht"
+                        },
+                        {
+                            id: 10,
+                            url: "https://images.unsplash.com/photo-1517101216274-0a676e44e4bd?w=400&h=200&fit=crop&crop=center",
+                            alt: "Sport Fishing Yacht"
+                        },
+                        {
+                            id: 11,
+                            url: "https://images.unsplash.com/photo-1615781222256-cd404c71eb9e?w=400&h=200&fit=crop&crop=center",
+                            alt: "Mediterranean Superyacht"
+                        },
+                        {
+                            id: 12,
+                            url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=200&fit=crop&crop=center",
+                            alt: "Ocean Explorer"
+                        },
+                        {
+                            id: 13,
+                            url: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=200&fit=crop&crop=center",
+                            alt: "Modern Expedition Yacht"
+                        },
+                        {
+                            id: 14,
+                            url: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=200&fit=crop&crop=center",
+                            alt: "Luxury Motor Yacht"
+                        },
+                        {
+                            id: 15,
+                            url: "https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?w=400&h=200&fit=crop&crop=center",
+                            alt: "Racing Yacht"
+                        },
+                        {
+                            id: 16,
+                            url: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=200&fit=crop&crop=center",
+                            alt: "Charter Superyacht"
+                        },
+                        {
+                            id: 17,
+                            url: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=200&fit=crop&crop=center",
+                            alt: "Twin Hull Catamaran"
+                        },
+                        {
+                            id: 18,
+                            url: "https://images.unsplash.com/photo-1615781222256-cd404c71eb9e?w=400&h=200&fit=crop&crop=center",
+                            alt: "Sunset Cruiser"
+                        },
+                        {
+                            id: 19,
+                            url: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=200&fit=crop&crop=center",
+                            alt: "Ocean Liner Style Yacht"
+                        },
+                        {
+                            id: 20,
+                            url: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=200&fit=crop&crop=center",
+                            alt: "High-Speed Motor Yacht"
+                        },
+                        {
+                            id: 21,
+                            url: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=200&fit=crop&crop=center",
+                            alt: "Flybridge Motor Yacht"
+                        },
+                        {
+                            id: 22,
+                            url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=200&fit=crop&crop=center",
+                            alt: "Explorer Superyacht"
+                        },
+                        {
+                            id: 23,
+                            url: "https://images.unsplash.com/photo-1517101216274-0a676e44e4bd?w=400&h=200&fit=crop&crop=center",
+                            alt: "Sport Yacht"
+                        },
+                        {
+                            id: 24,
+                            url: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=200&fit=crop&crop=center",
+                            alt: "Mega Yacht"
+                        },
+                        {
+                            id: 25,
+                            url: "https://images.unsplash.com/photo-1615781222256-cd404c71eb9e?w=400&h=200&fit=crop&crop=center",
+                            alt: "Luxury Charter Vessel"
+                        },
+                        {
+                            id: 26,
+                            url: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=200&fit=crop&crop=center",
+                            alt: "High-Performance Yacht"
+                        },
+                        {
+                            id: 27,
+                            url: "https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?w=400&h=200&fit=crop&crop=center",
+                            alt: "Classic Sailing Yacht"
+                        },
+                        {
+                            id: 28,
+                            url: "https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?w=400&h=200&fit=crop&crop=center",
+                            alt: "Performance Cruiser"
+                        },
+                        {
+                            id: 29,
+                            url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=200&fit=crop&crop=center",
+                            alt: "Long Range Explorer"
+                        },
+                        {
+                            id: 30,
+                            url: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=200&fit=crop&crop=center",
+                            alt: "Ultimate Superyacht"
                         }
-                    } else {
-                        this.selectedJobs = this.selectedJobs.filter(id => id !== jobId);
+                    ],
+                    
+                    getRandomYachtImage() {
+                        const randomIndex = Math.floor(Math.random() * this.yachtImages.length);
+                        const randomImage = this.yachtImages[randomIndex];
+                        console.log('🎲 Random yacht image selected:', randomImage);
+                        return randomImage;
+                    },
+                    
+                    updateSelection(jobId, isSelected) {
+                        if (isSelected) {
+                            if (!this.selectedJobs.includes(jobId)) {
+                                this.selectedJobs.push(jobId);
+                            }
+                        } else {
+                            this.selectedJobs = this.selectedJobs.filter(id => id !== jobId);
+                        }
+                    },
+                    
+                    clearSelection() {
+                        this.selectedJobs = [];
+                        // Clear all checkboxes
+                        document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+                    },
+                    
+                    compareJobs() {
+                        alert(`Comparing ${this.selectedJobs.length} jobs: ${this.selectedJobs.join(', ')}`);
                     }
-                },
-                
-                clearSelection() {
-                    this.selectedJobs = [];
-                    // Clear all checkboxes
-                    document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
-                },
-                
-                compareJobs() {
-                    alert(`Comparing ${this.selectedJobs.length} jobs: ${this.selectedJobs.join(', ')}`);
-                }
-            }));
+                };
+            });
             
             // Individual Job Card Component
-            Alpine.data('jobCard', (jobId, jobTitle, jobDescription) => ({
-                id: jobId,
-                title: jobTitle,
-                description: jobDescription,
-                expanded: false,
-                selected: false,
-                saved: false,
-                cardYachtImage: {
-                    url: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=200&fit=crop&crop=center',
-                    alt: 'Luxury Yacht'
-                },
-                
-                init() {
-                    // Get random yacht image for this card
-                    console.log('Initializing job card:', this.id);
-                    this.refreshYachtImage();
-                },
-                
-                refreshYachtImage() {
-                    // Get random yacht image from parent component
-                    const parent = this.$parent;
-                    console.log('Refreshing yacht image for job:', this.id, 'Parent:', parent);
-                    if (parent && parent.getRandomYachtImage) {
-                        this.cardYachtImage = parent.getRandomYachtImage();
-                        console.log('New image assigned:', this.cardYachtImage);
-                    } else {
-                        console.warn('Parent or getRandomYachtImage not available, using fallback');
-                        // Fallback: get random image directly
-                        const images = [
-                            {
-                                url: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=200&fit=crop&crop=center",
-                                alt: "Luxury Motor Yacht"
-                            },
-                            {
-                                url: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=200&fit=crop&crop=center",
-                                alt: "Superyacht in Harbor"
-                            },
-                            {
-                                url: "https://images.unsplash.com/photo-1582967788606-a171c1080cb0?w=400&h=200&fit=crop&crop=center",
-                                alt: "Modern Sailing Yacht"
-                            },
-                            {
-                                url: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=200&fit=crop&crop=center",
-                                alt: "Explorer Yacht"
-                            },
-                            {
-                                url: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=200&fit=crop&crop=center",
-                                alt: "Catamaran Superyacht"
-                            }
-                        ];
-                        const randomIndex = Math.floor(Math.random() * images.length);
-                        this.cardYachtImage = images[randomIndex];
-                    }
-                },
-                
-                toggleExpanded() {
-                    this.expanded = !this.expanded;
-                },
-                
-                toggleSaved() {
-                    this.saved = !this.saved;
-                    console.log(`Job ${this.id} ${this.saved ? 'saved' : 'unsaved'}`);
-                },
-                
-                copyJobLink() {
-                    const url = `${window.location.origin}/jobs/${this.id}`;
-                    navigator.clipboard.writeText(url).then(() => {
-                        console.log('Job link copied!');
-                    });
-                },
-                
-                shareJob() {
-                    if (navigator.share) {
-                        navigator.share({
-                            title: this.title,
-                            text: this.description.substring(0, 100) + '...',
-                            url: `${window.location.origin}/jobs/${this.id}`
+            Alpine.data('jobCard', (jobId, jobTitle, jobDescription) => {
+                console.log('🃏 Creating jobCard component for:', jobId);
+                return {
+                    id: jobId,
+                    title: jobTitle,
+                    description: jobDescription,
+                    expanded: false,
+                    selected: false,
+                    saved: false,
+                    cardYachtImage: {
+                        url: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=200&fit=crop&crop=center',
+                        alt: 'Luxury Yacht'
+                    },
+                    
+                    init() {
+                        // Get random yacht image for this card
+                        console.log('🚀 Initializing job card:', this.id);
+                        this.refreshYachtImage();
+                    },
+                    
+                    refreshYachtImage() {
+                        // Get random yacht image from parent component
+                        const parent = this.$parent;
+                        console.log('🔄 Refreshing yacht image for job:', this.id, 'Parent:', parent);
+                        if (parent && parent.getRandomYachtImage) {
+                            this.cardYachtImage = parent.getRandomYachtImage();
+                            console.log('✅ New image assigned:', this.cardYachtImage);
+                        } else {
+                            console.warn('⚠️ Parent or getRandomYachtImage not available, using fallback');
+                            // Fallback: get random image directly
+                            const images = [
+                                {
+                                    url: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=200&fit=crop&crop=center",
+                                    alt: "Luxury Motor Yacht"
+                                },
+                                {
+                                    url: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=200&fit=crop&crop=center",
+                                    alt: "Superyacht in Harbor"
+                                },
+                                {
+                                    url: "https://images.unsplash.com/photo-1582967788606-a171c1080cb0?w=400&h=200&fit=crop&crop=center",
+                                    alt: "Modern Sailing Yacht"
+                                },
+                                {
+                                    url: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=200&fit=crop&crop=center",
+                                    alt: "Explorer Yacht"
+                                },
+                                {
+                                    url: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=200&fit=crop&crop=center",
+                                    alt: "Catamaran Superyacht"
+                                }
+                            ];
+                            const randomIndex = Math.floor(Math.random() * images.length);
+                            this.cardYachtImage = images[randomIndex];
+                            console.log('🎯 Fallback image assigned:', this.cardYachtImage);
+                        }
+                    },
+                    
+                    toggleExpanded() {
+                        this.expanded = !this.expanded;
+                    },
+                    
+                    toggleSaved() {
+                        this.saved = !this.saved;
+                        console.log(`Job ${this.id} ${this.saved ? 'saved' : 'unsaved'}`);
+                    },
+                    
+                    copyJobLink() {
+                        const url = `${window.location.origin}/jobs/${this.id}`;
+                        navigator.clipboard.writeText(url).then(() => {
+                            console.log('Job link copied!');
                         });
-                    } else {
-                        this.copyJobLink();
-                    }
-                },
+                    },
+                    
+                    shareJob() {
+                        if (navigator.share) {
+                            navigator.share({
+                                title: this.title,
+                                text: this.description.substring(0, 100) + '...',
+                                url: `${window.location.origin}/jobs/${this.id}`
+                            });
+                        } else {
+                            this.copyJobLink();
+                        }
+                    },
 
-                handleImageError() {
-                    console.warn(`Image failed to load for job ${this.id}. Using fallback.`);
-                    this.refreshYachtImage();
-                }
-            }));
+                    handleImageError() {
+                        console.warn(`❌ Image failed to load for job ${this.id}. Using fallback.`);
+                        this.refreshYachtImage();
+                    }
+                };
+            });
+            
+            console.log('✅ Alpine.js global components registered successfully');
         });
     </script>
 </head>
