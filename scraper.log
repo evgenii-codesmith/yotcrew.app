@@ -514,3 +514,53 @@ TypeError: object Locator can't be used in 'await' expression
 2025-07-29 23:19:45,524 - __main__ - INFO - Printing 15 jobs to the console.
 2025-07-29 23:19:45,542 - __main__ - INFO - Saving 15 jobs to yotspot_recent_3days.20250729_231902.md.
 2025-07-29 23:19:45,543 - __main__ - INFO - Successfully saved jobs to Markdown file.
+2025-07-29 23:27:10,691 - __main__ - INFO - YotspotScraper (Playwright Edition) initialized with resilient selectors.
+2025-07-29 23:27:10,691 - __main__ - INFO - Starting Playwright-based scrape.
+2025-07-29 23:27:11,500 - __main__ - INFO - Discovering jobs on page 1: https://www.yotspot.com/job-search.html?p=1
+2025-07-29 23:27:14,948 - __main__ - INFO - Found 17 job cards using selector: div.job-item--list
+2025-07-29 23:27:15,028 - __main__ - INFO - Stopping pagination - found job 650 days old (older than 3 days)
+2025-07-29 23:27:15,038 - __main__ - INFO - Stopping pagination - found job 650 days old (older than 3 days)
+2025-07-29 23:27:16,269 - __main__ - INFO - Discovery complete. Found 15 recent job URLs to scrape.
+2025-07-29 23:27:16,270 - __main__ - INFO - Scraping detail from: https://www.yotspot.com/job-profile/2872238.html
+2025-07-29 23:27:17,620 - __main__ - INFO - Successfully scraped job: Captain in France...
+2025-07-29 23:27:18,622 - __main__ - INFO - Scraping detail from: https://www.yotspot.com/job-profile/2786587.html
+2025-07-29 23:27:20,181 - __main__ - INFO - Successfully scraped job: Deck/Steward(ess) in France...
+2025-07-29 23:27:21,183 - __main__ - INFO - Scraping detail from: https://www.yotspot.com/job-profile/2786733.html
+2025-07-29 23:27:22,518 - __main__ - INFO - Successfully scraped job: Sole Chef in France...
+2025-07-29 23:27:23,519 - __main__ - INFO - Scraping detail from: https://www.yotspot.com/job-profile/2904793.html
+2025-07-29 23:27:24,853 - __main__ - INFO - Successfully scraped job: Relief Chief Engineer in United States...
+2025-07-29 23:27:25,855 - __main__ - INFO - Scraping detail from: https://www.yotspot.com/job-profile/2904791.html
+2025-07-29 23:27:27,189 - __main__ - INFO - Successfully scraped job: Engineer in United States...
+2025-07-29 23:27:28,190 - __main__ - INFO - Scraping detail from: https://www.yotspot.com/job-profile/2904779.html
+2025-07-29 23:27:29,452 - __main__ - INFO - Successfully scraped job: Sole Chef in Panama...
+2025-07-29 23:27:30,453 - __main__ - INFO - Scraping detail from: https://www.yotspot.com/job-profile/2904744.html
+2025-07-29 23:27:31,794 - __main__ - INFO - Successfully scraped job: Lead Deckhand in Australia...
+2025-07-29 23:27:32,796 - __main__ - INFO - Scraping detail from: https://www.yotspot.com/job-profile/2807252.html
+2025-07-29 23:27:34,258 - __main__ - INFO - Successfully scraped job: Chief Officer/1st Mate in France...
+2025-07-29 23:27:35,260 - __main__ - INFO - Scraping detail from: https://www.yotspot.com/job-profile/2614175.html
+2025-07-29 23:27:36,600 - __main__ - INFO - Successfully scraped job: Sole Engineer in United States...
+2025-07-29 23:27:37,602 - __main__ - INFO - Scraping detail from: https://www.yotspot.com/job-profile/2670949.html
+2025-07-29 23:27:39,002 - __main__ - INFO - Successfully scraped job: Captain in United States...
+2025-07-29 23:27:40,004 - __main__ - INFO - Scraping detail from: https://www.yotspot.com/job-profile/2894766.html
+2025-07-29 23:27:41,454 - __main__ - INFO - Successfully scraped job: Deckhand in Italy...
+2025-07-29 23:27:42,455 - __main__ - INFO - Scraping detail from: https://www.yotspot.com/job-profile/2817869.html
+2025-07-29 23:27:43,901 - __main__ - INFO - Successfully scraped job: Laundry Steward(ess) in Italy...
+2025-07-29 23:27:44,903 - __main__ - INFO - Scraping detail from: https://www.yotspot.com/job-profile/2892244.html
+2025-07-29 23:27:46,345 - __main__ - INFO - Successfully scraped job: 2nd Steward(ess) in United States...
+2025-07-29 23:27:47,346 - __main__ - INFO - Scraping detail from: https://www.yotspot.com/job-profile/2881726.html
+2025-07-29 23:27:48,709 - __main__ - INFO - Successfully scraped job: Chief Officer/1st Mate in United States...
+2025-07-29 23:27:49,710 - __main__ - INFO - Scraping detail from: https://www.yotspot.com/job-profile/2821935.html
+2025-07-29 23:27:51,067 - __main__ - INFO - Successfully scraped job: Fleet Captain in United States...
+2025-07-29 23:27:52,205 - __main__ - INFO - Scraping finished. Successfully processed 15 jobs.
+2025-07-29 23:27:52,221 - __main__ - INFO - Printing 15 jobs to the console.
+2025-07-29 23:27:52,258 - __main__ - INFO - Saving 15 jobs to yotspot_recent_3days.20250729_232710.md.
+2025-07-29 23:27:52,259 - __main__ - INFO - Successfully saved jobs to Markdown file.
+2025-07-31 23:24:34,675 - __main__ - INFO - Daywork123Scraper initialized.
+2025-07-31 23:24:34,676 - __main__ - INFO - Starting scrape for up to 1 pages.
+2025-07-31 23:24:36,754 - __main__ - INFO - Scraping page 1...
+2025-07-31 23:24:39,603 - __main__ - INFO - Found 892 jobs on page 1. Total jobs: 892.
+2025-07-31 23:24:42,231 - __main__ - INFO - Browser closed. Scraping finished.
+2025-07-31 23:24:42,262 - __main__ - INFO - Printing 892 jobs to the console.
+2025-07-31 23:24:42,740 - __main__ - INFO - Finished printing jobs.
+2025-07-31 23:24:42,741 - __main__ - INFO - Saving 892 jobs to daywork123.20250731_232434.md.
+2025-07-31 23:24:42,751 - __main__ - INFO - Successfully saved jobs to Markdown file.
