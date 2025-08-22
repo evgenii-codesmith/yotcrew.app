@@ -5,6 +5,7 @@ from typing import Dict, Any, Optional, List, AsyncIterator
 from datetime import datetime
 import re
 from urllib.parse import urljoin, urlparse
+from sqlalchemy.orm import Session
 
 try:
     from playwright.async_api import async_playwright, Browser, Page
@@ -15,6 +16,8 @@ except ImportError:
 
 from .base import BaseScraper, UniversalJob, JobSource, EmploymentType, Department, VesselType
 from .registry import register_scraper
+from ..database import SessionLocal
+from ..models import Job
 
 logger = logging.getLogger(__name__)
 
@@ -78,10 +81,8 @@ class Daywork123Scraper(BaseScraper):
                     jobs_found = 0
                     for element in job_elements:
                         try:
-                            job_data = await self._extract_job_from_element(element, page)
-                            if job_data:
-                                # Convert to UniversalJob and yield
-                                universal_job = UniversalJob(**job_data)
+                            universal_job = await self._extract_job_from_element(element, page)
+                            if universal_job:
                                 yield universal_job
                                 jobs_found += 1
                         except Exception as e:
@@ -104,8 +105,8 @@ class Daywork123Scraper(BaseScraper):
             logger.error(f"Error in Daywork123 scraper: {e}")
             raise
     
-    async def _extract_job_from_element(self, element, page) -> Optional[Dict[str, Any]]:
-        """Extract job data from a single job element (table row)"""
+    async def _extract_job_from_element(self, element, page) -> Optional[UniversalJob]:
+        """Extract job data from a single job element (table row) and return UniversalJob"""
         try:
             # Extract all data immediately to avoid context issues
             cells = await element.query_selector_all('td')
@@ -126,6 +127,8 @@ class Daywork123Scraper(BaseScraper):
             
             # Extract job ID from first cell
             job_id = cell_texts[0] if cell_texts else ""
+            if not job_id:
+                return None
             
             # Extract title and link from second cell
             title_cell = cells[1] if len(cells) > 1 else None
@@ -137,51 +140,85 @@ class Daywork123Scraper(BaseScraper):
                 link_elem = await title_cell.query_selector('a')
                 if link_elem:
                     href = await link_elem.get_attribute('href')
-                    job_url = urljoin(self.base_url, href) if href else ""
+                    job_url = urljoin(self.base_url, href) if href else f"{self.base_url}/JobAnnouncementList.aspx"
                     title = cell_texts[1] if len(cell_texts) > 1 else ""
                 else:
-                    job_url = ""
+                    job_url = f"{self.base_url}/JobAnnouncementList.aspx"
                     title = cell_texts[1] if len(cell_texts) > 1 else ""
             except Exception:
-                job_url = ""
+                job_url = f"{self.base_url}/JobAnnouncementList.aspx"
                 title = cell_texts[1] if len(cell_texts) > 1 else ""
             
-            if not title:
+            if not title or len(title) < 3:
                 return None
             
             # Extract other information from remaining cells
-            location = cell_texts[2] if len(cell_texts) > 2 else ""
+            location = cell_texts[2] if len(cell_texts) > 2 else "Unknown"
             company = "Daywork123"  # Default company name
-            date_posted = cell_texts[4] if len(cell_texts) > 4 else ""
+            date_posted_str = cell_texts[4] if len(cell_texts) > 4 else ""
             
-            # Try to extract company name from the job description if it's short enough
+            # Try to extract company name from the job description if available
             if len(cell_texts) > 3 and cell_texts[3]:
-                potential_company = cell_texts[3][:50]  # Limit to 50 chars
-                if len(potential_company) <= 100:
+                description_text = cell_texts[3]
+                # Extract first few words as potential company name
+                words = description_text.split()[:3]  # Take first 3 words
+                potential_company = " ".join(words)
+                if len(potential_company) <= 100 and len(potential_company) > 2:
                     company = potential_company
+                description = description_text
+            else:
+                description = f"Job ID: {job_id} - Position available via Daywork123.com"
             
-            # Create job data
-            job_data = {
-                'external_id': f"dw123_{job_id}",
+            # Parse date
+            posted_date = self._parse_date(date_posted_str) if date_posted_str else datetime.utcnow()
+            
+            # Parse employment type from title
+            employment_type = self._detect_employment_type(title)
+            
+            # Parse department from title
+            department = self._detect_department(title)
+            
+            # Parse vessel type (if any info available)
+            vessel_type = self._detect_vessel_type(title + " " + description)
+            
+            # Calculate quality score
+            quality_score = self._calculate_quality_score({
                 'title': title,
                 'company': company,
-                'source': JobSource.DAYWORK123,
-                'source_url': job_url if job_url else f"{self.base_url}/JobAnnouncementList.aspx",
                 'location': location,
-                'date_posted': date_posted,
-                'description': f"Job ID: {job_id}",
-                'employment_type': None,
-                'department': None,
-                'vessel_type': None,
-                'salary_min': None,
-                'salary_max': None,
-                'salary_currency': None,
-                'requirements': [],
-                'benefits': [],
-                'contact_info': {}
+                'description': description,
+                'url': job_url,
+                'external_id': job_id
+            })
+            
+            # Create raw data for debugging
+            raw_data = {
+                'job_id': job_id,
+                'cell_texts': cell_texts,
+                'extraction_timestamp': datetime.utcnow().isoformat(),
+                'page_url': page.url if page else None
             }
             
-            return job_data
+            # Create UniversalJob object
+            universal_job = UniversalJob(
+                external_id=f"dw123_{job_id}",
+                title=title,
+                company=company,
+                source=JobSource.DAYWORK123,
+                source_url=job_url,
+                location=location,
+                description=description,
+                employment_type=employment_type,
+                department=department,
+                vessel_type=vessel_type,
+                posted_date=posted_date,
+                requirements=[],
+                benefits=[],
+                quality_score=quality_score,
+                raw_data=raw_data
+            )
+            
+            return universal_job
             
         except Exception as e:
             logger.error(f"Error extracting job element: {e}")
@@ -384,3 +421,155 @@ class Daywork123Scraper(BaseScraper):
     def get_supported_filters(self) -> List[str]:
         """Return supported filter parameters"""
         return ["location", "date_range", "job_type", "vessel_size", "salary_range"]
+    
+    async def save_jobs_to_db(self, jobs: List[UniversalJob]) -> int:
+        """Save scraped jobs to yachtjobs.db
+        
+        Args:
+            jobs: List of UniversalJob objects to save
+            
+        Returns:
+            Number of jobs successfully saved
+        """
+        if not jobs:
+            return 0
+            
+        saved_count = 0
+        
+        with SessionLocal() as db:
+            for job in jobs:
+                try:
+                    # Check if job already exists
+                    existing_job = db.query(Job).filter(
+                        Job.external_id == job.external_id,
+                        Job.source == job.source
+                    ).first()
+                    
+                    if existing_job:
+                        # Update existing job
+                        existing_job.title = job.title
+                        existing_job.company = job.company
+                        existing_job.location = job.location
+                        existing_job.country = job.country
+                        existing_job.region = job.region
+                        existing_job.description = job.description
+                        existing_job.salary_range = job.salary_range
+                        existing_job.salary_currency = job.salary_currency
+                        existing_job.salary_period = job.salary_period
+                        existing_job.employment_type = job.employment_type.value if job.employment_type else None
+                        existing_job.job_type = job.employment_type.value if job.employment_type else None
+                        existing_job.department = job.department.value if job.department else None
+                        existing_job.vessel_type = job.vessel_type.value if job.vessel_type else None
+                        existing_job.vessel_size = job.vessel_size
+                        existing_job.vessel_name = job.vessel_name
+                        existing_job.position_level = job.position_level
+                        existing_job.start_date = job.start_date
+                        existing_job.requirements = job.requirements
+                        existing_job.benefits = job.benefits
+                        existing_job.posted_date = job.posted_date
+                        existing_job.quality_score = job.quality_score
+                        existing_job.raw_data = job.raw_data
+                        existing_job.updated_at = datetime.utcnow()
+                        
+                        logger.debug(f"Updated existing job: {job.title}")
+                    else:
+                        # Create new job
+                        db_job = Job(
+                            external_id=job.external_id,
+                            title=job.title,
+                            company=job.company,
+                            location=job.location,
+                            country=job.country,
+                            region=job.region,
+                            description=job.description,
+                            source=job.source,
+                            source_url=str(job.source_url),
+                            salary_range=job.salary_range,
+                            salary_currency=job.salary_currency,
+                            salary_period=job.salary_period,
+                            employment_type=job.employment_type.value if job.employment_type else None,
+                            job_type=job.employment_type.value if job.employment_type else None,
+                            department=job.department.value if job.department else None,
+                            vessel_type=job.vessel_type.value if job.vessel_type else None,
+                            vessel_size=job.vessel_size,
+                            vessel_name=job.vessel_name,
+                            position_level=job.position_level,
+                            start_date=job.start_date,
+                            requirements=job.requirements,
+                            benefits=job.benefits,
+                            posted_date=job.posted_date,
+                            posted_at=job.posted_date,
+                            quality_score=job.quality_score,
+                            raw_data=job.raw_data,
+                            scraped_at=job.scraped_at,
+                            created_at=datetime.utcnow(),
+                            updated_at=datetime.utcnow()
+                        )
+                        db.add(db_job)
+                        logger.debug(f"Added new job: {job.title}")
+                    
+                    saved_count += 1
+                    
+                except Exception as e:
+                    logger.error(f"Error saving job {job.title}: {e}")
+                    continue
+            
+            try:
+                db.commit()
+                logger.info(f"Successfully saved {saved_count} jobs to database")
+            except Exception as e:
+                logger.error(f"Error committing jobs to database: {e}")
+                db.rollback()
+                return 0
+        
+        return saved_count
+    
+    async def scrape_and_save_jobs(self, max_pages: int = 5, filters: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        """Scrape jobs and save them to database
+        
+        Args:
+            max_pages: Maximum number of pages to scrape
+            filters: Optional filters to apply
+            
+        Returns:
+            Dictionary with scraping results
+        """
+        start_time = datetime.utcnow()
+        jobs_list = []
+        
+        try:
+            # Collect all jobs from scraping
+            async for job in self.scrape_jobs(max_pages, filters):
+                jobs_list.append(job)
+            
+            # Save to database
+            saved_count = await self.save_jobs_to_db(jobs_list)
+            
+            duration = (datetime.utcnow() - start_time).total_seconds()
+            
+            result = {
+                "source": self.source_name,
+                "jobs_found": len(jobs_list),
+                "jobs_saved": saved_count,
+                "duration": duration,
+                "timestamp": datetime.utcnow(),
+                "success": True,
+                "errors": []
+            }
+            
+            logger.info(f"Daywork123 scraping completed: {len(jobs_list)} found, {saved_count} saved")
+            return result
+            
+        except Exception as e:
+            duration = (datetime.utcnow() - start_time).total_seconds()
+            logger.error(f"Error in Daywork123 scrape_and_save_jobs: {e}")
+            
+            return {
+                "source": self.source_name,
+                "jobs_found": 0,
+                "jobs_saved": 0,
+                "duration": duration,
+                "timestamp": datetime.utcnow(),
+                "success": False,
+                "errors": [str(e)]
+            }

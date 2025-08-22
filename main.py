@@ -3,6 +3,7 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
+from sqlalchemy import func, Integer
 from datetime import datetime, timedelta
 import uvicorn
 import os
@@ -75,16 +76,28 @@ async def get_jobs(
     vessel_type: str = None,
     department: str = None,
     search: str = None,
+    source: str = None,
     db: Session = Depends(get_db)
 ):
-    """Get jobs with filtering and pagination"""
+    """Get jobs with filtering and pagination - includes all scraped sources"""
     query = db.query(Job)
     
-    # Apply filters
+    # Apply source filter
+    if source and source != "all":
+        query = query.filter(Job.source == source)
+    
+    # Apply filters (check both job_type and employment_type for compatibility)
     if job_type:
-        query = query.filter(Job.job_type.ilike(f"%{job_type}%"))
+        query = query.filter(
+            (Job.job_type.ilike(f"%{job_type}%")) | 
+            (Job.employment_type.ilike(f"%{job_type}%"))
+        )
     if location:
-        query = query.filter(Job.location.ilike(f"%{location}%"))
+        query = query.filter(
+            (Job.location.ilike(f"%{location}%")) |
+            (Job.country.ilike(f"%{location}%")) |
+            (Job.region.ilike(f"%{location}%"))
+        )
     if vessel_size:
         query = query.filter(Job.vessel_size.ilike(f"%{vessel_size}%"))
     if vessel_type:
@@ -93,14 +106,30 @@ async def get_jobs(
         query = query.filter(Job.department.ilike(f"%{department}%"))
     if search:
         query = query.filter(
-            Job.title.ilike(f"%{search}%") | 
-            Job.description.ilike(f"%{search}%")
+            (Job.title.ilike(f"%{search}%")) | 
+            (Job.description.ilike(f"%{search}%")) |
+            (Job.company.ilike(f"%{search}%"))
         )
     
-    # Pagination
-    offset = (page - 1) * limit
-    jobs = query.order_by(Job.posted_at.desc()).offset(offset).limit(limit).all()
+    # Get total count before pagination
     total = query.count()
+    
+    # Apply pagination and ordering
+    offset = (page - 1) * limit
+    
+    # Special sorting for Daywork123 by their original website ID
+    if source == "daywork123":
+        # Extract numeric ID from external_id (e.g., "dw123_172381" -> 172381) and sort descending
+        jobs = query.order_by(
+            func.cast(func.substr(Job.external_id, 7), Integer).desc()  # Skip "dw123_" prefix
+        ).offset(offset).limit(limit).all()
+    else:
+        # Default sorting for other sources
+        jobs = query.order_by(
+            Job.posted_date.desc().nullslast(),
+            Job.posted_at.desc().nullslast(),
+            Job.created_at.desc()
+        ).offset(offset).limit(limit).all()
     
     return {
         "jobs": [job.to_dict() for job in jobs],
@@ -117,6 +146,36 @@ async def get_job(job_id: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Job not found")
     return job.to_dict()
 
+@app.get("/api/jobs/stats")
+async def get_job_stats(request: Request, db: Session = Depends(get_db)):
+    """Get job statistics by source (HTMX-compatible)"""
+    total_jobs = db.query(Job).count()
+    
+    # Count by source
+    source_stats = db.query(Job.source, func.count(Job.id)).group_by(Job.source).all()
+    source_counts = {source: count for source, count in source_stats}
+    
+    # Recent activity (last 7 days)
+    week_ago = datetime.now() - timedelta(days=7)
+    recent_jobs = db.query(Job).filter(Job.created_at >= week_ago).count()
+    
+    # Return HTMX template if requested from frontend
+    if "HX-Request" in request.headers:
+        return templates.TemplateResponse("partials/job_stats.html", {
+            "request": request,
+            "total": total_jobs,
+            "sources": source_counts,
+            "recent_week": recent_jobs
+        })
+    
+    # Return JSON for API calls
+    return {
+        "total": total_jobs,
+        "sources": source_counts,
+        "recent_week": recent_jobs,
+        "available_sources": list(source_counts.keys())
+    }
+
 @app.get("/htmx/jobs-table")
 async def htmx_jobs_table(
     request: Request,
@@ -129,99 +188,39 @@ async def htmx_jobs_table(
     department: str = None,   # Deck, Interior, Engineering, Galley
     search: str = None,
     sort: str = None,  # "posted_at", "title", "salary"
-    source: str = "all",  # "all", "yotspot", "facebook"
+    source: str = "all",  # "all", "yotspot", "daywork123", "facebook"
     db: Session = Depends(get_db)
 ):
-    """HTMX endpoint for jobs table - supports both Yotspot and Facebook jobs"""
+    """HTMX endpoint for jobs table - supports all scraped job sources"""
     
-    # Get regular Yotspot jobs
-    yotspot_jobs_data = await get_jobs(page, limit, job_type, location, vessel_size, vessel_type, department, search, db)
-    all_jobs = list(yotspot_jobs_data["jobs"])
+    # Get jobs from database with enhanced filtering
+    jobs_data = await get_jobs(page, limit, job_type, location, vessel_size, vessel_type, department, search, source, db)
+    all_jobs = list(jobs_data["jobs"])
+    total = jobs_data["total"]
+    pages = jobs_data["pages"]
     
-    # Add Facebook jobs if requested
-    if source in ["all", "facebook"]:
-        try:
-            fb_service = FacebookJobService(db, fb_config)
-            fb_jobs = fb_service.get_recent_facebook_jobs(limit=limit)
-            
-            # Convert Facebook jobs to match regular job format
-            for fb_job in fb_jobs:
-                # Apply filters
-                if search and search.lower() not in (fb_job.title or "").lower():
-                    continue
-                if location and location.lower() not in (fb_job.location or "").lower():
-                    continue
-                if job_type and job_type.lower() not in (fb_job.job_type or "").lower():
-                    continue
-                
-                # Convert to dict format
-                job_dict = {
-                    'id': f"fb_{fb_job.id}",
-                    'title': fb_job.title,
-                    'company': fb_job.company,
-                    'location': fb_job.location,
-                    'department': fb_job.department,
-                    'job_type': fb_job.job_type,
-                    'salary': fb_job.salary,
-                    'description': fb_job.description,
-                    'posted_at': fb_job.posted_at,
-                    'source': fb_job.group_name or 'Facebook',
-                    'url': fb_job.post_url,
-                    'source_type': 'facebook'
-                }
-                all_jobs.append(job_dict)
-        except Exception as e:
-            # If Facebook jobs fail, continue with just Yotspot jobs
-            pass
-    
-    # Filter by source if specified
-    if source == "yotspot":
-        all_jobs = [job for job in all_jobs if job.get('source_type') != 'facebook']
-    elif source == "facebook":
-        all_jobs = [job for job in all_jobs if job.get('source_type') == 'facebook']
-    
-    # Dynamic sorting based on sort parameter
-    def get_sort_key(job, sort_field):
-        if sort_field == "title":
+    # Apply client-side sorting if specified (database already handles basic ordering)
+    if sort and sort != "posted_at":  # posted_at is already handled by database
+        def get_sort_key(job, sort_field):
+            if sort_field == "title":
+                return (job.get('title') or '').lower()
+            elif sort_field == "salary":
+                # Extract numeric value from salary string for sorting
+                salary = job.get('salary_range') or job.get('salary') or ''
+                import re
+                numbers = re.findall(r'[\d,]+', str(salary))
+                if numbers:
+                    try:
+                        return int(numbers[0].replace(',', ''))
+                    except:
+                        return 0
+                return 0
+            elif sort_field == "quality":
+                return job.get('quality_score', 0)
             return (job.get('title') or '').lower()
-        elif sort_field == "salary":
-            # Extract numeric value from salary string for sorting
-            salary = job.get('salary') or ''
-            import re
-            numbers = re.findall(r'[\d,]+', str(salary))
-            if numbers:
-                try:
-                    return int(numbers[0].replace(',', ''))
-                except:
-                    return 0
-            return 0
-        else:  # Default to posted_at
-            posted_at = job.get('posted_at')
-            if posted_at is None:
-                return datetime.min
-            if isinstance(posted_at, str):
-                try:
-                    return datetime.fromisoformat(posted_at.replace('Z', '+00:00'))
-                except:
-                    return datetime.min
-            if isinstance(posted_at, datetime):
-                return posted_at
-            return datetime.min
-    
-    # Apply sorting
-    if sort:
-        reverse_sort = sort in ["posted_at", "salary"]  # Date and salary sort descending by default
+        
+        reverse_sort = sort in ["salary", "quality"]  # These sort descending
         all_jobs.sort(key=lambda job: get_sort_key(job, sort), reverse=reverse_sort)
-    else:
-        # Default sort by posted date, newest first
-        all_jobs.sort(key=lambda job: get_sort_key(job, "posted_at"), reverse=True)
-    
-    # Limit results
-    all_jobs = all_jobs[:limit]
-    
-    # Calculate pagination (simplified for combined results)
-    total = len(all_jobs)
-    pages = (total + limit - 1) // limit if total > 0 else 1
     
     return templates.TemplateResponse("partials/jobs_table.html", {
         "request": request,
@@ -266,55 +265,69 @@ async def htmx_dashboard_stats(request: Request, db: Session = Depends(get_db)):
     })
 
 @app.post("/api/scrape")
-async def trigger_scrape(background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
+async def trigger_scrape(
+    background_tasks: BackgroundTasks, 
+    db: Session = Depends(get_db),
+    source: str = "all",
+    max_pages: int = 5
+):
     """Manually trigger job scraping"""
     # Create scraping job record
     scraping_job = ScrapingJob(
         status="started",
-        started_at=datetime.now()
+        started_at=datetime.now(),
+        scraper_type=source
     )
     db.add(scraping_job)
     db.commit()
     
     # Add background task
-    background_tasks.add_task(run_scrape_task, scraping_job.id)
+    background_tasks.add_task(run_scrape_task, scraping_job.id, source, max_pages)
     
-    return {"message": "Scraping started", "job_id": scraping_job.id}
+    return {"message": f"Scraping started for {source}", "job_id": scraping_job.id}
 
-async def run_scrape_task(scraping_job_id: int):
-    """Background task for scraping"""
+async def run_scrape_task(scraping_job_id: int, source: str = "all", max_pages: int = 5):
+    """Background task for scraping using new scraping service"""
+    from app.services.scraping_service import ScrapingService
+    
     db = next(get_db())
     try:
         scraping_job = db.query(ScrapingJob).filter(ScrapingJob.id == scraping_job_id).first()
+        service = ScrapingService()
         
-        # Run scraper
-        jobs_found = await scraper.scrape_jobs()
-        
-        # Save jobs to database
-        new_jobs = 0
-        for job_data in jobs_found:
-            existing_job = db.query(Job).filter(Job.external_id == job_data["external_id"]).first()
-            if not existing_job:
-                job = Job(**job_data)
-                db.add(job)
-                new_jobs += 1
-        
-        db.commit()
+        if source == "all":
+            # Scrape all sources
+            results = await service.scrape_all_sources(max_pages=max_pages)
+            total_found = sum(r.get("jobs_found", 0) for r in results)
+            total_new = sum(r.get("new_jobs", 0) for r in results)
+        elif source == "daywork123":
+            # Scrape only Daywork123
+            from app.scrapers.daywork123 import Daywork123Scraper
+            daywork_scraper = Daywork123Scraper()
+            result = await daywork_scraper.scrape_and_save_jobs(max_pages=max_pages)
+            total_found = result.get("jobs_found", 0)
+            total_new = result.get("jobs_saved", 0)
+        else:
+            # Scrape specific source
+            result = await service.scrape_source(source, max_pages=max_pages)
+            total_found = result.get("jobs_found", 0)
+            total_new = result.get("new_jobs", 0)
         
         # Update scraping job
         scraping_job.status = "completed"
         scraping_job.completed_at = datetime.now()
-        scraping_job.jobs_found = len(jobs_found)
-        scraping_job.new_jobs = new_jobs
+        scraping_job.jobs_found = total_found
+        scraping_job.new_jobs = total_new
         db.commit()
         
     except Exception as e:
         # Update scraping job with error
         scraping_job = db.query(ScrapingJob).filter(ScrapingJob.id == scraping_job_id).first()
-        scraping_job.status = "failed"
-        scraping_job.completed_at = datetime.now()
-        scraping_job.error_message = str(e)
-        db.commit()
+        if scraping_job:
+            scraping_job.status = "failed"
+            scraping_job.completed_at = datetime.now()
+            scraping_job.error_message = str(e)
+            db.commit()
     finally:
         db.close()
 

@@ -42,13 +42,38 @@
                     </button>
                 </div>
 
-                <!-- Quick Actions -->
-                <button class="btn btn-primary btn-sm" 
-                        hx-post="/api/scrape" 
-                        hx-confirm="Refresh job listings?"
-                        hx-target="#refresh-status">
-                    🔄 Refresh
-                </button>
+                                        <!-- Source Statistics -->
+                <div class="hidden lg:flex items-center gap-2 text-sm">
+                    <div id="source-stats" 
+                         hx-get="/api/jobs/stats" 
+                         hx-trigger="load, every 30s"
+                         hx-target="this" 
+                         hx-swap="innerHTML">
+                        Loading stats...
+                    </div>
+                </div>
+                
+                        <!-- Quick Actions -->
+                <div class="flex gap-2">
+                    <button class="btn btn-primary btn-sm" 
+                            hx-post="/api/scrape" 
+                            hx-confirm="Refresh job listings?"
+                            hx-target="#refresh-status">
+                        🔄 Refresh
+                    </button>
+                    
+                    <!-- Source Filter Dropdown -->
+                    <div class="dropdown dropdown-end">
+                        <div tabindex="0" role="button" class="btn btn-outline btn-sm">
+                            📊 Sources
+                        </div>
+                        <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+                            <li><a href="#" @click="filters.source = 'all'; applyFilters()">All Sources</a></li>
+                            <li><a href="#" @click="filters.source = 'yotspot'; applyFilters()">Yotspot</a></li>
+                            <li><a href="#" @click="filters.source = 'daywork123'; applyFilters()">Daywork123</a></li>
+                        </ul>
+                    </div>
+                </div>
                 
                 <!-- Menu Dropdown -->
                 <div class="dropdown dropdown-end">
@@ -237,6 +262,21 @@
                             <option value="Interior">Interior</option>
                             <option value="Engineering">Engineering</option>
                             <option value="Galley">Galley</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Source Filter -->
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-medium">📊 Source</span>
+                        </label>
+                        <select name="source" 
+                                x-model="filters.source"
+                                @change="applyFilters()"
+                                class="select select-bordered select-sm">
+                            <option value="all">All Sources</option>
+                            <option value="yotspot">Yotspot</option>
+                            <option value="daywork123">Daywork123</option>
                         </select>
                     </div>
 
@@ -545,6 +585,7 @@
                 vessel_size: '',
                 vessel_type: '',
                 department: '',
+                source: 'all',
                 sort: ''
             },
             searchResults: {
@@ -577,6 +618,7 @@
                     vessel_size: '',
                     vessel_type: '',
                     department: '',
+                    source: 'all',
                     sort: ''
                 };
                 this.applyFilters();

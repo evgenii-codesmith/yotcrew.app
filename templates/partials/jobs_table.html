@@ -7,8 +7,13 @@
          x-data="jobCard('{{ job.id }}', '{{ job.title }}', `{{ job.description|replace('`', '') if job.description else '' }}`)"
          :class="{ 'ring-2 ring-primary': selected, 'bg-base-200': saved }">
         
-        <!-- Card Header with Select Checkbox -->
+        <!-- Card Header with Select Checkbox and Source Badge -->
         <div class="absolute top-2 right-2 z-10 flex gap-2">
+            <!-- Source Badge -->
+            <div class="badge badge-sm {% if job.source == 'daywork123' %}badge-accent{% elif job.source == 'yotspot' %}badge-primary{% else %}badge-secondary{% endif %}">
+                {{ job.source|title }}
+            </div>
+            
             <input type="checkbox" 
                    x-model="selected"
                    @change="updateSelection('{{ job.id }}', $event.target.checked)"
@@ -22,6 +27,15 @@
                 <span x-text="saved ? '❤️' : '🤍'"></span>
             </button>
         </div>
+        
+        <!-- Quality Score Indicator -->
+        {% if job.quality_score %}
+        <div class="absolute top-2 left-2 z-10">
+            <div class="badge badge-sm {% if job.quality_score >= 0.8 %}badge-success{% elif job.quality_score >= 0.6 %}badge-warning{% else %}badge-error{% endif %}">
+                {{ "★%.1f"|format(job.quality_score) }}
+            </div>
+        </div>
+        {% endif %}
         
         <figure @click="toggleExpanded()" class="cursor-pointer relative overflow-hidden">
             <img :src="cardYachtImage.url || 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=200&fit=crop&crop=center'" 
@@ -49,6 +63,34 @@
                 <span x-show="expanded" class="text-primary">📖</span>
             </h2>
             
+            <!-- Job ID Badge for Daywork123 -->
+            {% if job.source == 'daywork123' and job.external_id %}
+            <div class="text-xs font-mono text-base-content/60 mt-1">
+                <span class="badge badge-ghost badge-xs">
+                    ID: {{ job.external_id.split('_')[1] if '_' in job.external_id else job.external_id }}
+                </span>
+            </div>
+            {% endif %}
+            
+            <!-- Job metadata badges -->
+            <div class="flex flex-wrap gap-1 mt-2">
+                {% if job.employment_type or job.job_type %}
+                <div class="badge badge-ghost badge-sm">
+                    {{ job.employment_type or job.job_type }}
+                </div>
+                {% endif %}
+                {% if job.department %}
+                <div class="badge badge-outline badge-sm">
+                    {{ job.department }}
+                </div>
+                {% endif %}
+                {% if job.vessel_type %}
+                <div class="badge badge-neutral badge-sm">
+                    {{ job.vessel_type|replace('_', ' ')|title }}
+                </div>
+                {% endif %}
+            </div>
+            
             {% if job.company %}
             <p class="text-sm text-base-content/70 font-medium">{{ job.company }}</p>
             {% endif %}
@@ -75,23 +117,69 @@
                 {% endif %}
             </div>
             
-            <!-- Badges -->
-            <div class="flex flex-wrap gap-1 my-2">
-                {% if job.location %}
-                <div class="badge badge-outline badge-sm">
-                    {{ job.location }}
+            <!-- Enhanced Job Information -->
+            <div class="space-y-2">
+                <!-- Location and Vessel Info -->
+                <div class="flex flex-wrap gap-1">
+                    {% if job.location %}
+                    <div class="badge badge-outline badge-sm">
+                        📍 {{ job.location }}
+                    </div>
+                    {% endif %}
+                    
+                    {% if job.vessel_size %}
+                    <div class="badge badge-ghost badge-sm">
+                        🛥️ {{ job.vessel_size }}
+                    </div>
+                    {% endif %}
                 </div>
-                {% endif %}
                 
+                <!-- Salary Information -->
                 {% if job.salary_range or job.salary %}
-                <div class="badge badge-success badge-sm">
-                    {{ job.salary_range or job.salary }}
+                <div class="flex items-center gap-2 text-sm">
+                    <span class="text-green-600 font-semibold">💰 {{ job.salary_range or job.salary }}</span>
+                    {% if job.salary_currency and job.salary_currency != 'USD' %}
+                    <span class="text-xs text-base-content/60">({{ job.salary_currency }})</span>
+                    {% endif %}
+                    {% if job.salary_period %}
+                    <span class="text-xs text-base-content/60">per {{ job.salary_period }}</span>
+                    {% endif %}
                 </div>
                 {% endif %}
                 
-                {% if job.job_type %}
-                <div class="badge badge-primary badge-sm">
-                    {{ job.job_type }}
+                <!-- Requirements (expandable) -->
+                {% if job.requirements and job.requirements|length > 0 %}
+                <div x-show="expanded" class="mt-3">
+                    <h4 class="text-sm font-semibold text-base-content/80 mb-1">✅ Requirements:</h4>
+                    <ul class="text-xs text-base-content/70 space-y-1">
+                        {% for req in job.requirements[:3] %}
+                        <li class="flex items-start gap-1">
+                            <span class="text-primary">•</span>
+                            <span>{{ req }}</span>
+                        </li>
+                        {% endfor %}
+                        {% if job.requirements|length > 3 %}
+                        <li class="text-base-content/50">... and {{ job.requirements|length - 3 }} more</li>
+                        {% endif %}
+                    </ul>
+                </div>
+                {% endif %}
+                
+                <!-- Benefits (expandable) -->
+                {% if job.benefits and job.benefits|length > 0 %}
+                <div x-show="expanded" class="mt-3">
+                    <h4 class="text-sm font-semibold text-base-content/80 mb-1">🎁 Benefits:</h4>
+                    <ul class="text-xs text-base-content/70 space-y-1">
+                        {% for benefit in job.benefits[:3] %}
+                        <li class="flex items-start gap-1">
+                            <span class="text-success">•</span>
+                            <span>{{ benefit }}</span>
+                        </li>
+                        {% endfor %}
+                        {% if job.benefits|length > 3 %}
+                        <li class="text-base-content/50">... and {{ job.benefits|length - 3 }} more</li>
+                        {% endif %}
+                    </ul>
                 </div>
                 {% endif %}
                 

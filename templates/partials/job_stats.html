@@ -1,0 +1,38 @@
+<!-- Job Statistics Display -->
+<div class="flex items-center gap-4 text-xs">
+    <!-- Total Jobs -->
+    <div class="flex items-center gap-1">
+        <span class="font-semibold">{{ total }}</span>
+        <span class="text-base-content/60">jobs</span>
+    </div>
+    
+    <!-- Source Breakdown -->
+    {% if sources %}
+    <div class="flex items-center gap-2">
+        {% for source, count in sources.items() %}
+        <div class="flex items-center gap-1">
+            <!-- Source-specific badges -->
+            {% if source == 'daywork123' %}
+            <div class="badge badge-accent badge-xs">{{ count }}</div>
+            <span class="text-base-content/60">DW123</span>
+            {% elif source == 'yotspot' %}
+            <div class="badge badge-primary badge-xs">{{ count }}</div>
+            <span class="text-base-content/60">Yotspot</span>
+            {% else %}
+            <div class="badge badge-secondary badge-xs">{{ count }}</div>
+            <span class="text-base-content/60">{{ source|title }}</span>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <!-- Recent Activity -->
+    {% if recent_week %}
+    <div class="flex items-center gap-1">
+        <div class="badge badge-success badge-xs">+{{ recent_week }}</div>
+        <span class="text-base-content/60">this week</span>
+    </div>
+    {% endif %}
+</div>
+

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, Text, Boolean, Float, func
+from sqlalchemy import Column, Integer, String, DateTime, Text, Boolean, Float, func, JSON
 from datetime import datetime
 from .database import Base
 import uuid
@@ -11,18 +11,45 @@ class Job(Base):
     title = Column(String, nullable=False)
     company = Column(String)
     location = Column(String)
+    
+    # Vessel information
     vessel_type = Column(String)  # Motor Yacht, Sailing Yacht, etc.
     vessel_size = Column(String)  # 40m+, 50-74m, etc.
-    job_type = Column(String)     # Permanent, Temporary, Rotational
+    vessel_name = Column(String)
+    
+    # Employment details
+    job_type = Column(String)     # Permanent, Temporary, Rotational  
+    employment_type = Column(String)  # For compatibility with UniversalJob
     department = Column(String)   # Deck, Interior, Engineering, etc.
+    position_level = Column(String)
+    
+    # Compensation
     salary_range = Column(String)
+    salary_currency = Column(String)
     salary_per = Column(String)   # per day, per month, per year
+    salary_period = Column(String)  # For compatibility with UniversalJob
+    
+    # Timing
     start_date = Column(String)
-    description = Column(Text)
     posted_at = Column(DateTime)
+    posted_date = Column(DateTime)  # For compatibility with UniversalJob
+    
+    # Content
+    description = Column(Text)
+    requirements = Column(JSON)  # Store as JSON array
+    benefits = Column(JSON)      # Store as JSON array
+    
+    # Location details
+    country = Column(String)
+    region = Column(String)
+    
+    # Metadata
     source_url = Column(String)
     source = Column(String, default="yotspot")
     is_featured = Column(Boolean, default=False)
+    quality_score = Column(Float, default=0.0)
+    raw_data = Column(JSON)  # Store raw scraping data
+    scraped_at = Column(DateTime, default=datetime.utcnow)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
@@ -33,18 +60,30 @@ class Job(Base):
             "title": self.title,
             "company": self.company,
             "location": self.location,
+            "country": self.country,
+            "region": self.region,
             "vessel_type": self.vessel_type,
             "vessel_size": self.vessel_size,
+            "vessel_name": self.vessel_name,
             "job_type": self.job_type,
+            "employment_type": self.employment_type,
             "department": self.department,
+            "position_level": self.position_level,
             "salary_range": self.salary_range,
+            "salary_currency": self.salary_currency,
             "salary_per": self.salary_per,
+            "salary_period": self.salary_period,
             "start_date": self.start_date,
             "description": self.description,
+            "requirements": self.requirements,
+            "benefits": self.benefits,
             "posted_at": self.posted_at.isoformat() if self.posted_at else None,
+            "posted_date": self.posted_date.isoformat() if self.posted_date else None,
             "source_url": self.source_url,
             "source": self.source,
             "is_featured": self.is_featured,
+            "quality_score": self.quality_score,
+            "scraped_at": self.scraped_at.isoformat() if self.scraped_at else None,
             "created_at": self.created_at.isoformat(),
             "updated_at": self.updated_at.isoformat()
         }
