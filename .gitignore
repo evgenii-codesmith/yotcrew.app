@@ -124,4 +124,7 @@ dmypy.json
 .Spotlight-V100
 .Trashes
 ehthumbs.db
-Thumbs.db 
+Thumbs.db
+
+# Generated documentation files
+fullcode.txt 
