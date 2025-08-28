@@ -117,19 +117,29 @@ async def get_jobs(
     # Apply pagination and ordering
     offset = (page - 1) * limit
     
-    # Special sorting for Daywork123 by their original website ID
+    # Sort jobs with Daywork123 jobs first (by job ID descending), then other jobs by creation date
     if source == "daywork123":
-        # Extract numeric ID from external_id (e.g., "dw123_172381" -> 172381) and sort descending
+        # When filtering by daywork123, sort by job ID descending (172504, 172503, 172502...)
         jobs = query.order_by(
-            func.cast(func.substr(Job.external_id, 7), Integer).desc()  # Skip "dw123_" prefix
+            func.cast(func.substr(Job.external_id, 7), Integer).desc()
         ).offset(offset).limit(limit).all()
     else:
-        # Default sorting for other sources
-        jobs = query.order_by(
-            Job.posted_date.desc().nullslast(),
-            Job.posted_at.desc().nullslast(),
-            Job.created_at.desc()
+        # For mixed results, use a subquery approach to prioritize Daywork123 jobs
+        # First get Daywork123 jobs sorted by job ID, then other jobs by creation date
+        daywork_jobs = query.filter(Job.source == 'daywork123').order_by(
+            func.cast(func.substr(Job.external_id, 7), Integer).desc()
         ).offset(offset).limit(limit).all()
+        
+        remaining_limit = limit - len(daywork_jobs)
+        other_jobs = []
+        if remaining_limit > 0:
+            other_jobs = query.filter(Job.source != 'daywork123').order_by(
+                Job.created_at.desc(),
+                Job.posted_date.desc().nullslast(),
+                Job.posted_at.desc().nullslast()
+            ).offset(max(0, offset - query.filter(Job.source == 'daywork123').count())).limit(remaining_limit).all()
+        
+        jobs = daywork_jobs + other_jobs
     
     return {
         "jobs": [job.to_dict() for job in jobs],

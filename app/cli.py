@@ -76,6 +76,7 @@ async def cmd_run_now(args):
                 print("=== Scraping Completed Successfully ===")
                 print(f"Period: {result.get('period', 'unknown')}")
                 print(f"Jobs Found: {result.get('jobs_found', 0)}")
+                print(f"Jobs Saved: {result.get('jobs_saved', 0)}")
                 print(f"Duration: {result.get('duration_seconds', 0):.2f} seconds")
                 print(f"Max Pages: {result.get('max_pages', 0)}")
             else:

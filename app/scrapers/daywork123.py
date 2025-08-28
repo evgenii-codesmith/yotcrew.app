@@ -130,44 +130,59 @@ class Daywork123Scraper(BaseScraper):
             if not job_id:
                 return None
             
-            # Extract title and link from second cell
-            title_cell = cells[1] if len(cells) > 1 else None
-            if not title_cell:
+            # Correct field mapping based on actual table structure:
+            # Cell 0: Job ID  
+            # Cell 1: Date
+            # Cell 2: Company
+            # Cell 3: Job Title/Description
+            # Cell 4: Location
+            
+            # Extract company from cell 2
+            company = cell_texts[2] if len(cell_texts) > 2 else "Daywork123"
+            
+            # Extract title/description from cell 3
+            title_description = cell_texts[3] if len(cell_texts) > 3 else ""
+            if not title_description or len(title_description) < 10:
                 return None
             
-            # Try to get the link from the title cell
-            try:
-                link_elem = await title_cell.query_selector('a')
-                if link_elem:
-                    href = await link_elem.get_attribute('href')
-                    job_url = urljoin(self.base_url, href) if href else f"{self.base_url}/JobAnnouncementList.aspx"
-                    title = cell_texts[1] if len(cell_texts) > 1 else ""
-                else:
-                    job_url = f"{self.base_url}/JobAnnouncementList.aspx"
-                    title = cell_texts[1] if len(cell_texts) > 1 else ""
-            except Exception:
-                job_url = f"{self.base_url}/JobAnnouncementList.aspx"
-                title = cell_texts[1] if len(cell_texts) > 1 else ""
+            # Extract location from cell 4
+            location = cell_texts[4] if len(cell_texts) > 4 else "Unknown"
             
-            if not title or len(title) < 3:
-                return None
+            # Parse title from title_description
+            # First line or first sentence is often the actual job title
+            lines = title_description.split('\n')
+            first_line = lines[0].strip()
             
-            # Extract other information from remaining cells
-            location = cell_texts[2] if len(cell_texts) > 2 else "Unknown"
-            company = "Daywork123"  # Default company name
-            date_posted_str = cell_texts[4] if len(cell_texts) > 4 else ""
-            
-            # Try to extract company name from the job description if available
-            if len(cell_texts) > 3 and cell_texts[3]:
-                description_text = cell_texts[3]
-                # Extract first few words as potential company name
-                words = description_text.split()[:3]  # Take first 3 words
-                potential_company = " ".join(words)
-                if len(potential_company) <= 100 and len(potential_company) > 2:
-                    company = potential_company
-                description = description_text
+            # Extract title (look for job titles at the beginning)
+            if first_line.startswith('POSITION:'):
+                # Format: "POSITION: Mate [9 DAYS]"
+                title = first_line.replace('POSITION:', '').strip()
+                title = title.split('[')[0].strip()  # Remove brackets like [9 DAYS]
+            elif ':' in first_line and len(first_line.split(':')[0]) < 30:
+                # Format: "Job title: Captain for a CAL 33' Sailboat"
+                title = first_line.split(':', 1)[1].strip()
             else:
-                description = f"Job ID: {job_id} - Position available via Daywork123.com"
+                # Use first line as title, limit length
+                title = first_line[:100] if first_line else "Position Available"
+            
+            # Use the full title_description as description
+            description = title_description
+            
+            # Date is in cell 1 (was being used as title)
+            date_posted_str = cell_texts[1] if len(cell_texts) > 1 else ""
+            
+            # Try to get the job URL from any cell with a link
+            job_url = f"{self.base_url}/JobAnnouncementList.aspx"  # Default
+            try:
+                for i, cell in enumerate(cells[:5]):  # Check first 5 cells for links
+                    link_elem = await cell.query_selector('a')
+                    if link_elem:
+                        href = await link_elem.get_attribute('href')
+                        if href and not href.startswith('javascript:'):
+                            job_url = urljoin(self.base_url, href)
+                            break
+            except Exception:
+                pass  # Use default URL
             
             # Parse date
             posted_date = self._parse_date(date_posted_str) if date_posted_str else datetime.utcnow()
@@ -180,6 +195,16 @@ class Daywork123Scraper(BaseScraper):
             
             # Parse vessel type (if any info available)
             vessel_type = self._detect_vessel_type(title + " " + description)
+            
+            # Ensure all fields respect database constraints
+            title = title[:255] if title else ""  # title field is 255 chars
+            company = company[:100] if company else "Daywork123"  # company field is 100 chars
+            location = location[:100] if location else "Unknown"  # location field is 100 chars
+            description = description[:2000] if description else f"Job ID: {job_id} - Position available via Daywork123.com"  # description field is 2000 chars
+            
+            # Ensure minimum description length
+            if len(description) < 10:
+                description = f"Job ID: {job_id} - {title} position available via Daywork123.com"
             
             # Calculate quality score
             quality_score = self._calculate_quality_score({

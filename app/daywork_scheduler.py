@@ -57,20 +57,21 @@ async def run_daywork123_scraping_job(period: str, hour: int, minute: int, max_p
             raise ValueError("Daywork123 scraper not found in registry")
         
         # Run the scraper
-        jobs_found = await scraper.scrape_and_save_jobs(max_pages=max_pages)
+        result = await scraper.scrape_and_save_jobs(max_pages=max_pages)
         
         # Update scraping job with results
         scraping_job.status = "completed"
         scraping_job.completed_at = datetime.now()
-        scraping_job.jobs_found = len(jobs_found) if jobs_found else 0
-        scraping_job.new_jobs = len(jobs_found) if jobs_found else 0  # This would need proper new job detection
+        scraping_job.jobs_found = result.get('jobs_found', 0) if result else 0
+        scraping_job.new_jobs = result.get('jobs_saved', 0) if result else 0
         db.commit()
         
         duration = (datetime.now() - start_time).total_seconds()
         logger.info(
             f"Daywork123 scraping completed - {period} "
             f"({hour:02d}:{minute:02d}) - "
-            f"Found {len(jobs_found) if jobs_found else 0} jobs in {duration:.2f}s"
+            f"Found {result.get('jobs_found', 0) if result else 0} jobs, "
+            f"saved {result.get('jobs_saved', 0) if result else 0} jobs in {duration:.2f}s"
         )
         
     except Exception as e:

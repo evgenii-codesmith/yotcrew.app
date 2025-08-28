@@ -182,6 +182,56 @@ curl "http://localhost:8000/api/jobs?source=daywork123&limit=10"
 
 ---
 
+## 🌐 View Jobs JSON in Browser
+
+Once your web application is running (`python main.py`), you can view all scraped jobs in JSON format by visiting these URLs in your browser:
+
+### **View All Jobs (Most Recent First):**
+```
+http://localhost:8000/api/jobs
+```
+
+### **View Daywork123 Jobs:**
+```
+http://localhost:8000/api/jobs?source=daywork123
+```
+
+### **With Pagination:**
+```
+http://localhost:8000/api/jobs?page=1&limit=50
+http://localhost:8000/api/jobs?limit=1000
+```
+
+### **Advanced Filtering:**
+```
+# Filter by location
+http://localhost:8000/api/jobs?location=Miami
+
+# Filter by job type
+http://localhost:8000/api/jobs?job_type=daywork
+
+# Search jobs
+http://localhost:8000/api/jobs?search=captain
+
+# Combined filters
+http://localhost:8000/api/jobs?source=daywork123&limit=100&search=stewardess
+```
+
+### **Useful Examples:**
+- **Last 10 jobs (most recent)**: `http://localhost:8000/api/jobs?limit=10`
+- **First 10 Daywork123 jobs**: `http://localhost:8000/api/jobs?source=daywork123&limit=10`
+- **All 756 jobs**: `http://localhost:8000/api/jobs?limit=1000`
+- **Search for captain jobs**: `http://localhost:8000/api/jobs?search=captain&limit=50`
+
+### **✅ Verified Working:**
+- **✅ `http://localhost:8000/api/jobs?limit=10`** → Last 10 jobs in correct order
+- **✅ `http://localhost:8000/api/jobs`** → All jobs with Daywork123 jobs first (by job ID), then others  
+- **✅ `http://localhost:8000/api/jobs?source=daywork123&limit=5`** → Daywork123-only jobs in correct order
+
+**JSON Response includes**: `id`, `title`, `company`, `location`, `description`, `source`, `posted_date`, `employment_type`, `department`, `vessel_type`, and more job metadata.
+
+---
+
 ## 🚨 Quick Start Commands
 
 ```bash

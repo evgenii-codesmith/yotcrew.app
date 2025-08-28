@@ -102,17 +102,17 @@ class SchedulerService:
             start_time = datetime.now()
             logger.info(f"Running Daywork123 scraper manually ({period})")
             
-            # Use the standalone function to run the scraper
-            # We use current time for hour/minute since this is a manual run
-            current_hour = start_time.hour
-            current_minute = start_time.minute
+            # Use the scraper directly to get proper results
+            from ..scrapers.registry import ScraperRegistry
             
-            await run_daywork123_scraping_job(
-                period=period,
-                hour=current_hour,
-                minute=current_minute,
-                max_pages=self.config.DAYWORK123_MAX_PAGES
-            )
+            scraper_registry = ScraperRegistry()
+            scraper = scraper_registry.get_scraper('daywork123')
+            
+            if not scraper:
+                raise ValueError("Daywork123 scraper not found in registry")
+            
+            # Run the scraper and get results
+            scraper_result = await scraper.scrape_and_save_jobs(max_pages=self.config.DAYWORK123_MAX_PAGES)
             
             duration = (datetime.now() - start_time).total_seconds()
             
@@ -121,7 +121,9 @@ class SchedulerService:
                 'period': period,
                 'started_at': start_time.isoformat(),
                 'duration_seconds': duration,
-                'max_pages': self.config.DAYWORK123_MAX_PAGES
+                'max_pages': self.config.DAYWORK123_MAX_PAGES,
+                'jobs_found': scraper_result.get('jobs_found', 0) if scraper_result else 0,
+                'jobs_saved': scraper_result.get('jobs_saved', 0) if scraper_result else 0
             }
             
             logger.info(
