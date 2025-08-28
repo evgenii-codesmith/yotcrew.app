@@ -45,7 +45,7 @@ cp scheduler.env.example .env
 Key settings:
 ```env
 # Database
-SCHEDULER_DB_URL=sqlite:///./yachtjobs.db
+SCHEDULER_DB_URL=sqlite:///./yacht_jobs.db
 
 # Scraping
 DAYWORK123_MAX_PAGES=5

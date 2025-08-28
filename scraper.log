@@ -564,3 +564,216 @@ TypeError: object Locator can't be used in 'await' expression
 2025-07-31 23:24:42,740 - __main__ - INFO - Finished printing jobs.
 2025-07-31 23:24:42,741 - __main__ - INFO - Saving 892 jobs to daywork123.20250731_232434.md.
 2025-07-31 23:24:42,751 - __main__ - INFO - Successfully saved jobs to Markdown file.
+2025-08-16 01:58:25,330 - __main__ - INFO - 🚀 Starting Daywork123 scraper...
+2025-08-16 01:58:25,336 - daywork123_scraper - INFO - Daywork123Scraper initialized.
+2025-08-16 01:58:25,336 - daywork123_scraper - INFO - Starting scrape for up to 2 pages.
+2025-08-16 01:58:26,953 - daywork123_scraper - INFO - Scraping page 1...
+2025-08-16 01:58:29,899 - daywork123_scraper - INFO - Found 792 jobs on page 1. Total jobs: 792.
+2025-08-16 01:58:32,400 - daywork123_scraper - INFO - Scraping page 2...
+2025-08-16 01:58:47,379 - __main__ - ERROR - Unexpected error: Browser.close: Connection closed while reading from the driver
+2025-08-16 01:58:47,455 - asyncio - ERROR - Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed\nCall log:\n  - waiting for locator("a[href*=\\"Page$2\\"]")\n')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Call log:
+  - waiting for locator("a[href*=\"Page$2\"]")
+
+2025-08-16 02:00:29,095 - __main__ - INFO - 🚀 Starting Daywork123 scraper...
+2025-08-16 02:00:29,095 - daywork123_scraper - INFO - Daywork123Scraper initialized.
+2025-08-16 02:00:29,096 - daywork123_scraper - INFO - Starting scrape for up to 2 pages.
+2025-08-16 02:00:30,641 - daywork123_scraper - INFO - Scraping page 1...
+2025-08-16 02:00:33,382 - daywork123_scraper - INFO - Found 792 jobs on page 1. Total jobs: 792.
+2025-08-16 02:00:35,884 - daywork123_scraper - INFO - Scraping page 2...
+2025-08-16 02:01:05,910 - daywork123_scraper - ERROR - Timeout occurred waiting for job table or pagination link on page 2.
+2025-08-16 02:01:05,911 - daywork123_scraper - ERROR - Failed to load page 2 or find job table. Stopping.
+2025-08-16 02:01:06,145 - daywork123_scraper - INFO - Browser closed. Scraping finished.
+2025-08-16 02:01:06,161 - __main__ - INFO - 📊 Initial scraping completed:
+2025-08-16 02:01:06,161 - __main__ - INFO -    Total jobs found: 792
+2025-08-16 02:01:06,162 - __main__ - INFO - 🔍 Filtering jobs from last week...
+2025-08-16 02:01:09,686 - __main__ - INFO - ✅ Job from last week: I am looking for a freelance stewardess in Miami that is confident in handling lines and fenders and possesses confidence in providing white glove service . PRIVATE 2025 70ft luxury day boat in coconut grove . (posted: 15-Aug-2025)
+2025-08-16 02:01:09,693 - __main__ - INFO - ✅ Job from last week: Hiring ASAP solo stew to finish the season. With the possibility of joining full-time. Great position with an established program. Summers in New England and Winters in Fort Lauderdale, with trips to the Bahamas. This is a stewardess position with some line handling on 80' yacht. US-flagged. Please send your Resume to the email address for consideration. Full benefits available and great pay depending on experience (posted: 15-Aug-2025)
+2025-08-16 02:01:09,699 - __main__ - INFO - ✅ Job from last week: ISO CAPTAIN AVAILABLE ASAP UNTIL NOVEMBER 80ft Hargrave Cayman Islands vessel. The program is based in The Bahamas until December where we move to BVI possibility to stay onboard then. Wonderful live aboard owners. Contact me if interested thank you! superstarmy143@gmail.com (posted: 15-Aug-2025)
+2025-08-16 02:01:09,705 - __main__ - INFO - ✅ Job from last week: Deckhand Needed, 91' Motor Yacht, US Flag, in search of deckhand for 2-3 days of exterior cleaning starting monday August 18. We are in yard on the hard at LMC. Please have experience with washing, teak treatment, metal polish, etc.
+US Passport only, thank you.
+Dayrate paid per day, lunch provided.
+Please send CV's for consideration (posted: 15-Aug-2025)
+2025-08-16 02:01:09,711 - __main__ - INFO - ✅ Job from last week: Stews needed - Aug 30th event onboard at Key Biscayne.  General help with housekeeping, and guest service. (posted: 15-Aug-2025)
+2025-08-16 02:01:09,718 - __main__ - INFO - ✅ Job from last week: Looking for Captian for months of September - October Chelsea Piers based PURSUIT DC325. Captain will need to be available on 3-4 days notice to take owner’s family and friends on 1-3 hour evening cruises. Likely no more than  5-6 trips for the fall. Pay is $750 / per outing. Contact me if interested. (posted: 15-Aug-2025)
+2025-08-16 02:01:09,725 - __main__ - INFO - ✅ Job from last week: Seeking professional stew for temporary gig in Fort Lauderdale.  Line handling skills a plus,  must be able to take care of guests onboard basically heads and beds for approximately 5 days.  Interior and exterior skills,  US flag, dates 8/20/25 to 8/26/25. Nice owners,  4 guests.  Possible trip to Miami on 8/24/25.  No drama. (posted: 14-Aug-2025)
+2025-08-16 02:01:09,731 - __main__ - INFO - ✅ Job from last week: Looking for a certified diver to assist with a bottom cleaning on a large vessel one day next week. Must have experience and your own regulator and BCD. Can lead to future jobs (posted: 14-Aug-2025)
+2025-08-16 02:01:09,736 - __main__ - INFO - ✅ Job from last week: Looking for a Stew to finish out northeast season. Heading back to FTL early/mid  september. US Flagged, US applicants only please.  Private vessel, runs with crew of 2 on an 85’ M/Y. Stew must be confident with lines and fenders. Please send C/V to fs85captain@yahoo.com (posted: 14-Aug-2025)
+2025-08-16 02:01:09,741 - __main__ - INFO - ✅ Job from last week: Seeking an experienced deck/stewardess for a week starting Monday 10/18 until Sunday 10/25 .
+Must be friendly and accommodating and work well with others. Possibly a couple of daytrips but mostly dockside.  Live onboard possible but not necessary. US citizens or green card only. Please respond with resume and references.  Day rate or week rate works. (posted: 14-Aug-2025)
+2025-08-16 02:01:09,747 - __main__ - INFO - ✅ Job from last week: Max Tallent Management is seeking a reliable and detail-oriented Estate Assistant Property Manager for an Ultra High Net Worth (UHNW) client in South Florida. This position is ideal for a candidate who thrives in a hands-on role, has basic handyman skills, is comfortable working around pets, and is looking to support the day-to-day operations of a large, well-run private estate. (posted: 14-Aug-2025)
+2025-08-16 02:01:09,752 - __main__ - INFO - ✅ Job from last week: Position: Full-Time Deck/Stewardess
+We are seeking a versatile Deck/Stewardess to join our crew aboard a privately run 85-foot motor yacht Based in New England during the summer months and out of Jupiter, Florida and The Bahamas during the rest of the year, this role serves within a two-person crew structure and supports light owner usage. The ideal candidate will provide occasional guest service, interior cleaning and assist with exterior duties such as line handling, deck maintenance, and docking readiness when required. This position calls for someone with strong attention to detail, adaptability, and a proactive "can-do" attitude. 2 years of experience in yacht service is preferred but will train the right candidate if less experienced. Bonus credentials include food safety certification and basic seamanship. Compensation is commensurate with experience; the package includes accommodations, travel between seasonal cruising grounds, and provisions.
+All candidates must be legal to (posted: 14-Aug-2025)
+2025-08-16 02:01:09,759 - __main__ - INFO - ✅ Job from last week: Max Tallent Management is seeking a polished and detail-driven Housekeeping & Laundry Assistant with light glam/personal styling support experience for a discerning ULHNWI based in the Fort Lauderdale–Miami area. This full-time position requires a pet-friendly, hands-on professional with a sharp eye for cleanliness, wardrobe presentation, and the refined touches that support a luxury lifestyle.
+
+This is a rare opportunity for a housekeeping professional who understands elevated service standards and takes pride in maintaining pristine environments and polished wardrobes with a touch of glam. (posted: 14-Aug-2025)
+2025-08-16 02:01:09,766 - __main__ - INFO - ✅ Job from last week: Max Tallent Management is seeking a polished, detail-oriented, and pet-friendly Estate Stewardess to support a private Ultra-Luxury High-Net-Worth Individual (ULHNWI) based in the Miami–Fort Lauderdale area. This is a land-based role ideal for current or former yacht stewardesses looking to transition to a private estate, while continuing to provide white-glove hospitality service in a luxury residential environment.
+
+The ideal candidate is highly organized, proactive, and comfortable working in a fast-paced household with high expectations for discretion, precision, and flexibility. (posted: 14-Aug-2025)
+2025-08-16 02:01:09,773 - __main__ - INFO - ✅ Job from last week: TEMP MATE needed for a 100' private, foreign flagged motor yacht based in Newport Beach, California. 
+
+Start date August 10 for 5 weeks. Accommodation provided onboard. 
+
+Ideally 100T license or Yachtmaster. 
+
+Interested candidates please email: goodstew@marinegroupbw.com (posted: 13-Aug-2025)
+2025-08-16 02:01:09,781 - __main__ - INFO - ✅ Job from last week: We are looking for an experienced Permanent Solo Stewardess for an 85ft private/charter yacht.
+?? Requirements:
+Proven experience as a solo stew
+Fluent in Spanish and English
+Valid B1/B2 visa
+If you meet the criteria and are interested in the position, please send your CV to:
+?? captaingulex@yahoo.com (posted: 13-Aug-2025)
+2025-08-16 02:01:09,788 - __main__ - INFO - ✅ Job from last week: Looking for a Mate for an 85 foot American flagged MY. Someone who has a 50 ton or 100 ton or 200 ton and he’s looking for their first captains job.  Owner is nice once you get to know him very knowledgeable and helpful.  They do tow a 26 foot good line handling is a must.  be very hands-on.  Must be open to some interior cleaning when necessary.  The boat will be traveling back to South Florida by November . winters in Marco Island. With occasional weekend trips to the keys.  If interested, please send résumé to Mattkgreenaway@yahoo.com. (posted: 13-Aug-2025)
+2025-08-16 02:01:09,793 - __main__ - INFO - ✅ Job from last week: Co-Captain or a Mate (ready for their 1st drive) required for an 85' M/Y - US Flag. Private - Start up: ASAP - Must be willing to help with the interior - Must be able to operate a tender - If you are interested, please e-mail CV and references to receive more specific job information. (posted: 13-Aug-2025)
+2025-08-16 02:01:09,801 - __main__ - INFO - ✅ Job from last week: Chef 37m Foreign-Flagged Motor Yacht
+Start Date: ASAP
+Location: Florida & The Bahamas
+Salary: $8,000 to $9,000 USD/month
+Contract: Private with charters
+
+We are seeking a Chef for a 37-meter foreign-flagged motor yacht. The ideal candidate will be culinary trained, creative, and confident cooking for charter guests.
+
+Requirements:
+
+Culinary training/certification
+B1/B2 visa or legal to work in the US
+Must have previous experience cooking on yachts
+Female chef (due to cabin arrangements)? (posted: 12-Aug-2025)
+2025-08-16 02:01:09,808 - __main__ - INFO - ✅ Job from last week: Deck/Engineer type needed for 95' motor in the yard FLL. ASAP. Please email your CV or call 954 712 7126. US or green card needed. (posted: 12-Aug-2025)
+2025-08-16 02:01:09,815 - __main__ - INFO - ✅ Job from last week: Looking for an experienced dive helper one day this week or next for a 178-ft yacht in Fort Lauderdale. Could lead to ongoing work. Coordinating exact date with the customer now. Must have own regulator and BCD. (posted: 12-Aug-2025)
+2025-08-16 02:01:09,820 - __main__ - INFO - ✅ Job from last week: Position: DECKHAND/ENGINEER - YARD FTL Start Date: ASAP Itinerary: Fort Lauderdale YARD License Required: MUST have Deck experience, some basic engineering skills are a HUGE plus. Requirements: painting, teak work, product knowledge, can turn a wrench, handle a screw driver, etc. STCW + Refresher marine medical or ENG1 (valid for 6 months) US or work permit to work in the US yard Any engineering licenses are a plus. (AEC 1 and 2) Responsibilities: Some Engine room knowledge Deck maintenance experience Tender driving - Grady-white tender 34' Plus Lines/Fenders Watches Other: Good social skills, well spoken. Great eye for detail. Hands on. Will be in the yard in FTL for a couple of months. Job Specifics: Local to FTL is best. Can stay on the boat or off. (posted: 12-Aug-2025)
+2025-08-16 02:01:09,826 - __main__ - INFO - ✅ Job from last week: Deck required for an 85' M/Y - US Flag. Private - Start up: ASAP - Must be willing to help with the interior - Must be able to operate a tender - If you are interested, please e-mail CV and references to receive more specific job information. (posted: 12-Aug-2025)
+2025-08-16 02:01:09,833 - __main__ - INFO - ✅ Job from last week: Position: DECKHAND/ENGINEER - YARD FTL
+Start Date: ASAP
+Itinerary: Fort Lauderdale YARD
+License Required: MUST have Deck experience, some basic engineering skills are a HUGE plus.
+Requirements:  painting, teak work, product knowledge, can turn a wrench, handle a screw driver, etc. 
+STCW + Refresher
+marine medical or ENG1 (valid for 6 months)
+US or work permit to work in the US yard
+Any engineering licenses are a plus. (AEC 1 and 2)
+ 
+Responsibilities:
+Some Engine room knowledge
+Deck maintenance experience
+Tender driving - Grady-white tender 34' Plus
+Lines/Fenders
+Watches
+ 
+Other: Good social skills, well spoken. Great eye for detail.  Hands on. Will be in the yard in FTL for a couple of months.  
+
+Job Specifics:  Local to FTL is best. Can stay on the boat or off. (posted: 12-Aug-2025)
+2025-08-16 02:01:09,838 - __main__ - INFO - ✅ Job from last week: US flagged 68' Princess. Need stew for Bahama trip Aug 24th to Sept 3rd. 5 easy guests. Docked every night. Duties include; interior, heads beds, light breakfast, mixing drinks, snack trays, handle lines when docking. Please send CV and daily rate to 
+capttodd@protonmail.com    Thank you (posted: 12-Aug-2025)
+2025-08-16 02:01:09,843 - __main__ - INFO - ✅ Job from last week: Position: Full-Time Deck/Stewardess
+We are seeking a versatile Deck/Stewardess to join our crew aboard a privately run 85-foot motor yacht Based in New England during the summer months and out of Jupiter, Florida and The Bahamas during the rest of the year, this role serves within a two-person crew structure and supports light owner usage. The ideal candidate will provide occasional guest service, interior cleaning and assist with exterior duties such as line handling, deck maintenance, and docking readiness when required. This position calls for someone with strong attention to detail, adaptability, and a proactive "can-do" attitude. 2 years of experience in yacht service is preferred but will train the right candidate if less experienced. Bonus credentials include food safety certification and basic seamanship. Compensation is commensurate with experience; the package includes accommodations, travel between seasonal cruising grounds, and provisions.
+All candidates must be legal to (posted: 12-Aug-2025)
+2025-08-16 02:01:09,850 - __main__ - INFO - ✅ Job from last week: Chief Stewardess. Seeking permanent. Could be experienced second stew looking to move up into new role. Longevity a huge plus. Industry standard benefits. 13th month bonus, health, classes, 30 days PTO etc. US or Green card only. Must pass drug test. Miami Winters, Annapolis Summers (posted: 12-Aug-2025)
+2025-08-16 02:01:09,854 - __main__ - INFO - ✅ Job from last week: We are looking for a proficient and experienced stewardess to join a charter from August 27th to Sept 2nd aboard a 30m yacht on the west coast of Florida. Crew of four. Will pay for travel from South Florida. (posted: 12-Aug-2025)
+2025-08-16 02:01:09,861 - __main__ - INFO - ✅ Job from last week: Looking for an experienced First Mate OR Deckhand for a US flagged M/Y. Based in Fort Lauderdale . Frequent guest usage. MUST BE EXPERIENCED IN DECK MAINTENANCE , OFFICER DUTIES , ORGANIZED AND CLEAN.  
+
+Live Aboard position with 2+ Year Experience required 
+
+MUST!!! Be US citizen. Pay DOE (posted: 11-Aug-2025)
+2025-08-16 02:01:09,869 - __main__ - INFO - ✅ Job from last week: POSITION: Captain
+[MUST: Expert at Ballasting the Boat During Wake Sports]
+
+WHEN: August 17 from 1-6pm
+
+BOAT: Nautique G25 Wakesurf Boat (2018)
+FLAG: USA
+OTHER CREW OB: None
+
+BOARDING: Private Dock in North Bay Village
+GUEST(S): 8-10
+
+ITINERARY: Wakeboarding in Biscayne Bay
+
+OFFER = $300 + Tip 
+ACCEPT OFFER or MAKE A BID
+
+Please message me, if you're qualified & available. Thank you! (posted: 11-Aug-2025)
+2025-08-16 02:01:09,876 - __main__ - INFO - ✅ Job from last week: Stewardess wanted for 30m private motor yacht. Must have experience on yachts 20m+, strong service and housekeeping skills, fluent Russian and English. Duties: guest service, housekeeping, laundry, table setting, provisioning, boat wash, polishing and assisting other crew. Competitive salary, great crew and owner. Send CV, few photos and certificates to motoryacht.aezakmi@yahoo.com (posted: 11-Aug-2025)
+2025-08-16 02:01:09,883 - __main__ - INFO - ✅ Job from last week: 1 stewardess needed for interior work/serving
+possible 1 week. $200 per day. Palm Beach/Peruvian Dock. Town of Palm Beach Docks. Send CV (posted: 11-Aug-2025)
+2025-08-16 02:01:09,890 - __main__ - INFO - ✅ Job from last week: Seeking US citizen/ green card mate for August 27th- September 6th. Trawler cruising from Hamptons to Marblehead, MA for busy weekend with low key guests. Watersports+ large tender experience big plus. Must be willing to do basic stew duties as well. Airbnb, meals, and day rate. Please send CV and location. (posted: 11-Aug-2025)
+2025-08-16 02:01:09,897 - __main__ - INFO - ✅ Job from last week: Daywork -5 days-  80ft motor yacht in ft Lauderdale is looking for a dayworker to clean engine room, bilges and assist with organizing. (posted: 11-Aug-2025)
+2025-08-16 02:01:09,903 - __main__ - INFO - ✅ Job from last week: Looking for interior dayworker for this week (posted: 11-Aug-2025)
+2025-08-16 02:01:09,908 - __main__ - INFO - ✅ Job from last week: Seeking Deckhand/Mate for US flagged 100 ft Motor Yacht in the Stuart Area. Ideal candidate would have good knowledge of boat exterior maintenance. Will consider deckhand with technical background working towards moving up in their career. License a plus. Vessel travels approx 1-2 weeks a year. Very light usage and stays local. 5 day workweek plus occasional weekends. Candidate must have own transportation. Pay commensurate with experience. Prefer local candidates. THIS IS A NON LIVE-ABOARD position, ONLY LEGAL US CITIZEN/RESIDENTS NEED TO APPLY. Please send resume with picture. (posted: 11-Aug-2025)
+2025-08-16 02:01:09,912 - __main__ - INFO - ✅ Job from last week: Looking for interior dayworker for this week (posted: 11-Aug-2025)
+2025-08-16 02:01:09,918 - __main__ - INFO - ✅ Job from last week: 2nd Engineer required for a 52m M/Y - US Flag. Private - Start up: ASAP - If you are interested, please e-mail CV and references to receive more specific job information. (posted: 11-Aug-2025)
+2025-08-16 02:01:09,923 - __main__ - INFO - ✅ Job from last week: Mate required for a 35m M/Y - US Flag. Private - Start up: ASAP - If you are interested, please e-mail CV and references to receive more specific job information. (posted: 11-Aug-2025)
+2025-08-16 02:01:09,930 - __main__ - INFO - ✅ Job from last week: Deckhand wanted. 90’ Motor Yacht. US Flagged. US passport or Green Card holder. . Looking for a Team player with a strong work ethic. This is an entry level position. Green crew ok. Locally based Palm Beach. M-F 9-5. Salary DOE. (posted: 10-Aug-2025)
+2025-08-16 02:01:09,936 - __main__ - INFO - ✅ Job from last week: Looking for a Female Chef for a 96 foot yacht, Starting August 18th. Private yacht, amazing owners, position can be Temp or Ideally long term. Joining the yacht in Fort Lauderdale, moving to South Carolina by the end of the month. Please contact Laurenrose33@icloud.com (posted: 10-Aug-2025)
+2025-08-16 02:01:09,943 - __main__ - INFO - ✅ Job from last week: POSITION: Delivery Captain [Freelance]
+
+WHEN: 24 Hours - Start August 22, 2024 @ 9am
+
+BOAT: 32' Beneteau 32S5 (1990)
+
+FLAG: USA
+OTHER CREW OB: Owner/Mate 
+
+BOARDING: Miami Beach
+GUEST(S): 2
+
+ITINERARY: Delivery of sailboat to Boynton Beach, with owner (English speaking) and his partner (Spanish speaking). Both would like a lesson type experience along the way. All in the ICW.
+
+OFFER = $400 + Tip 
+ACCEPT OFFER or MAKE A BID
+
+Please message me, if you're qualified & available. Thank you! (posted: 10-Aug-2025)
+2025-08-16 02:01:09,950 - __main__ - INFO - ✅ Job from last week: POSITION: Delivery Mate [Freelance]
+
+WHEN: August 11, 2025, starting @ 1pm
+
+BOAT: 34' Rinker 320 Fiesta Vee (2005)
+FLAG: USA
+OTHER CREW OB: Mate
+
+BOARDING: Fort Pierce
+GUEST(S): 0
+OTHER CREW OB: Captain
+
+ITINERARY: Deliver the boat from Fort Pierce to Freeport Bahamas
+
+OFFER = $300 + Tip + Meal Reimbursement, 1 Night Lodging in Freeport & Flight back to FLL or PBIA
+ACCEPT OFFER or MAKE A BID
+
+Please message me, if you're qualified & available. Thank you! (posted: 10-Aug-2025)
+2025-08-16 02:01:09,956 - __main__ - INFO - ✅ Job from last week: POSITION: Delivery Captain [Freelance]
+
+WHEN: August 11, 2025, starting @ 1pm
+
+BOAT: 34' Rinker 320 Fiesta Vee (2005)
+FLAG: USA
+OTHER CREW OB: Mate
+
+BOARDING: Fort Pierce
+GUEST(S): 0
+OTHER CREW OB: Mate
+
+ITINERARY: Deliver the boat from Fort Pierce to Freeport Bahamas
+
+OFFER = $400 + Tip + Meal Reimbursement, 1 Night Lodging in Freeport & Flight back to PBIA or FLL
+ACCEPT OFFER or MAKE A BID
+
+Please message me, if you're qualified & available. Thank you! (posted: 10-Aug-2025)
+2025-08-16 02:01:13,139 - __main__ - INFO - 📊 Date filtering completed:
+2025-08-16 02:01:13,139 - __main__ - INFO -    Total jobs scraped: 792
+2025-08-16 02:01:13,139 - __main__ - INFO -    Jobs from last week: 44
+2025-08-16 02:01:13,140 - __main__ - INFO -    Filtered out: 748 older jobs
+2025-08-16 02:01:13,140 - __main__ - INFO - 📋 Sample scraped jobs:
+2025-08-16 02:01:13,140 - __main__ - INFO -    1. I am looking for a freelance stewardess in Miami that is confident in handling lines and fenders and possesses confidence in providing white glove service . PRIVATE 2025 70ft luxury day boat in coconut grove . @ Captain
+2025-08-16 02:01:13,140 - __main__ - INFO -    2. Hiring ASAP solo stew to finish the season. With the possibility of joining full-time. Great position with an established program. Summers in New England and Winters in Fort Lauderdale, with trips to the Bahamas. This is a stewardess position with some line handling on 80' yacht. US-flagged. Please send your Resume to the email address for consideration. Full benefits available and great pay depending on experience @ Capt
+2025-08-16 02:01:13,140 - __main__ - INFO -    3. ISO CAPTAIN AVAILABLE ASAP UNTIL NOVEMBER 80ft Hargrave Cayman Islands vessel. The program is based in The Bahamas until December where we move to BVI possibility to stay onboard then. Wonderful live aboard owners. Contact me if interested thank you! superstarmy143@gmail.com @ Private
+2025-08-16 02:01:13,140 - __main__ - INFO - 💾 Saving jobs to database...
+2025-08-16 02:01:13,140 - __main__ - INFO - Saving 44 jobs to database...
+2025-08-16 02:01:13,465 - __main__ - INFO - ✅ Database operation completed: 44 new, 0 updated
+2025-08-16 02:01:13,487 - __main__ - INFO - 📋 Database verification:
+2025-08-16 02:01:13,488 - __main__ - INFO -    Total jobs in database: 44
+2025-08-16 02:01:13,488 - __main__ - INFO -    Daywork123 jobs: 44

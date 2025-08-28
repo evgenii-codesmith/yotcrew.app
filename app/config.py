@@ -11,8 +11,8 @@ from typing import List
 class SchedulerConfig:
     """Configuration class for scheduler settings with time-based intervals."""
     
-    # Database Configuration
-    DB_URL: str = os.getenv('SCHEDULER_DB_URL', 'sqlite:///./yachtjobs.db')
+    # Database Configuration - Use same database as main application
+    DB_URL: str = os.getenv('SCHEDULER_DB_URL', 'sqlite:///./yacht_jobs.db')
     
     # Logging Configuration
     LOG_LEVEL: str = os.getenv('LOG_LEVEL', 'INFO')

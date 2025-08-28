@@ -423,7 +423,7 @@ class Daywork123Scraper(BaseScraper):
         return ["location", "date_range", "job_type", "vessel_size", "salary_range"]
     
     async def save_jobs_to_db(self, jobs: List[UniversalJob]) -> int:
-        """Save scraped jobs to yachtjobs.db
+        """Save scraped jobs to yacht_jobs.db
         
         Args:
             jobs: List of UniversalJob objects to save
