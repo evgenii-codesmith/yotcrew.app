@@ -159,7 +159,7 @@ DAY_HOURS = [12, 15]                        # 12 PM, 3 PM
 DAY_MINUTES = [0]                           # Only :00 minutes
 EVENING_HOURS = [18, 19, 20, 21]           # Hours 6-9 PM  
 EVENING_MINUTES = [0, 30]                   # :00 and :30 minutes
-DAYWORK123_MAX_PAGES = 5                    # Pages to scrape per run
+DAYWORK123_MAX_PAGES = 1                    # Pages to scrape per run
 ```
 
 ---
@@ -263,3 +263,13 @@ curl "http://localhost:8000/api/jobs?source=daywork123&page=1&limit=5"
 **Note**: The scraper automatically saves jobs to your SQLite database (`yacht_jobs.db`) with deduplication based on external ID, so you won't get duplicates when running multiple times.
 
 **That's it!** Start with `python main.py` for the full system or `python -m app.cli run-now` for a quick test.
+
+# Quick manual run (most common)
+python -m app.cli run-now
+
+# Start full web application
+python main.py
+# Visit http://localhost:8000 to browse the 756 scraped jobs
+
+# Check status
+python -m app.cli status

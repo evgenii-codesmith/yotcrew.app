@@ -4,7 +4,7 @@ import logging
 from datetime import datetime
 from .database import SessionLocal
 from .models import Job, ScrapingJob
-from .scraper import YotspotScraper
+from .scrapers.yotspot import YotspotScraper
 
 logger = logging.getLogger(__name__)
 

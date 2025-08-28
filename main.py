@@ -11,7 +11,7 @@ from contextlib import asynccontextmanager
 
 from app.database import engine, get_db, Base
 from app.models import Job, ScrapingJob
-from app.scraper import YotspotScraper
+from app.scrapers.yotspot import YotspotScraper
 from app.scheduler import start_scheduler, stop_scheduler
 
 # Create tables

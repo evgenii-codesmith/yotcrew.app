@@ -44,8 +44,7 @@ async def run_daywork123_scraping_job(period: str, hour: int, minute: int, max_p
         scraping_job = ScrapingJob(
             status="started",
             started_at=start_time,
-            scraper_type=f"daywork123_{period}",
-            job_id=f"daywork123_{period}_{hour:02d}_{minute:02d}"
+            scraper_type=f"daywork123_{period}"
         )
         db.add(scraping_job)
         db.commit()

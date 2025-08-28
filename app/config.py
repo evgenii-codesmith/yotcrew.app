@@ -18,7 +18,7 @@ class SchedulerConfig:
     LOG_LEVEL: str = os.getenv('LOG_LEVEL', 'INFO')
     
     # Daywork123 Scraper Configuration
-    DAYWORK123_MAX_PAGES: int = int(os.getenv('DAYWORK123_MAX_PAGES', '5'))
+    DAYWORK123_MAX_PAGES: int = int(os.getenv('DAYWORK123_MAX_PAGES', '1'))
     
     # Time-based interval definitions
     # Morning hours: High activity period (6 AM - 9 AM)
